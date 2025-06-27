@@ -74,4 +74,77 @@ function update_akun($post)
 }
 
 
+function tambah_makanan($data) {
+    global $db;
+
+    $nama = htmlspecialchars($data['nama']);
+    $harga = (int)$data['harga'];
+    $kategori = htmlspecialchars($data['kategori']);
+    $stok = (int)$data['stok'];
+    $deskripsi = htmlspecialchars($data['deskripsi']);
+
+    // Upload gambar
+    if ($_FILES['gambar']['error'] === 0) {
+        $gambar = uniqid() . '-' . $_FILES['gambar']['name'];
+        move_uploaded_file($_FILES['gambar']['tmp_name'], 'gambar/' . $gambar);
+    } else {
+        $gambar = 'default.png';
+    }
+
+    $query = "INSERT INTO makanan (nama_makanan, harga, kategori, stok, deskripsi, gambar)
+              VALUES ('$nama', $harga, '$kategori', $stok, '$deskripsi', '$gambar')";
+
+    return mysqli_query($db, $query);
+}
+
+
+
+function update_makanan($data) {
+    global $db;
+
+    $id = $data['id'];
+    $nama = htmlspecialchars($data['nama']);
+    $harga = (int)$data['harga'];
+    $kategori = htmlspecialchars($data['kategori']);
+    $stok = (int)$data['stok'];
+    $deskripsi = htmlspecialchars($data['deskripsi']);
+
+    // Get the old image filename first
+    $result = mysqli_query($db, "SELECT gambar FROM makanan WHERE id = $id");
+    $oldImage = mysqli_fetch_assoc($result)['gambar'];
+
+    if ($_FILES['gambar']['error'] === 0) {
+        // New image is uploaded
+        $gambarBaru = uniqid() . '-' . $_FILES['gambar']['name'];
+        $uploadPath = 'gambar/' . $gambarBaru;
+        
+        // Move the new file
+        if (move_uploaded_file($_FILES['gambar']['tmp_name'], $uploadPath)) {
+            // Delete the old image if it exists
+            if (!empty($oldImage) && file_exists('gambar/' . $oldImage)) {
+                unlink('gambar/' . $oldImage);
+            }
+        } else {
+            // If upload fails, keep the old image
+            $gambarBaru = $oldImage;
+        }
+    } else {
+        // No new image uploaded, keep the old one
+        $gambarBaru = $oldImage;
+    }
+
+    $query = "UPDATE makanan SET
+                nama_makanan = '$nama',
+                harga = $harga,
+                kategori = '$kategori',
+                stok = $stok,
+                deskripsi = '$deskripsi',
+                gambar = '$gambarBaru'
+              WHERE id = $id";
+
+    return mysqli_query($db, $query);
+}
+
+
+
 

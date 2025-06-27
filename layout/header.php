@@ -103,7 +103,7 @@ include 'config/app.php'
     <li class="nav-item">
       <a href="makanan.php" class="nav-link">
         <i class="nav-icon fas fa-utensils"></i>
-        <p>Menu Makanan</p>
+        <p>Data Makanan</p>
       </a>
     </li>
 
