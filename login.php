@@ -30,7 +30,7 @@ if (isset($_POST['login'])) {
                 $_SESSION['email'] = $hasil['email'];
                 $_SESSION['level'] = $hasil['level'];
 
-                header("Location: index.php");
+                header("Location: dasboard.php");
                 exit;
             } else {
                 $errorAuth = true;

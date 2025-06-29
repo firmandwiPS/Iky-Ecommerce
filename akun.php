@@ -168,6 +168,7 @@ if (isset($_POST['ubah'])) {
                         <select name="level" class="form-control" required>
                             <option value="">-- Pilih Level --</option>
                             <option value="1">Admin</option>
+                            <option value="2">Owner</option>
                         </select>
                     </div>
                 </div>
@@ -219,6 +220,7 @@ if (isset($_POST['ubah'])) {
                                 <select name="level" class="form-control" required>
                                     <?php $level = $akun['level']; ?>
                                     <option value="1" <?= $level == '1' ? 'selected' : '' ?>>Admin</option>
+                                    <option value="2" <?= $level == '2' ? 'selected' : '' ?>>Owner</option>
                                 </select>
                             </div>
                         <?php else : ?>

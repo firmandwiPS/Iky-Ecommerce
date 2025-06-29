@@ -75,7 +75,7 @@ include 'config/app.php'
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-<a href="index.php" class="brand-link bg-dark text-white" style="text-decoration: none;">
+<a href="dasboard.php" class="brand-link bg-dark text-white" style="text-decoration: none;">
   <i class="fas fa-shopping-basket ml-2 mr-2"></i>
   <span class="brand-text font-weight-bold">Iky Ecommerce</span>
 </a>
@@ -93,7 +93,7 @@ include 'config/app.php'
 
     <!-- Dashboard -->
     <li class="nav-item">
-      <a href="index.php" class="nav-link">
+      <a href="dasboard.php" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
         <p>Dashboard</p>
       </a>

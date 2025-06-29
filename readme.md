@@ -4,14 +4,12 @@ Teknologi :
 - MySQL/MariaDB
 
 User Login : 
+
 1. Akun Admin 
 - username : admin
 - password : 123456
 
-2. Akun Operator Barang
-- username : barang
+1. Akun Owner
+- username : owner
 - password : 123456
 
-3. Akun Operator Mahasiswa 
-- username : mahasiswaa
-- password : 123456
