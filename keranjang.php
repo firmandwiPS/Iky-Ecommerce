@@ -61,19 +61,19 @@ while ($row = mysqli_fetch_assoc($result)) {
 <body class="bg-gray-100 text-gray-800" x-data="{ showCheckout: false }">
 
 <!-- Navbar -->
-<nav class="bg-white p-4 shadow-md sticky top-0 z-50">
+<nav class="bg-blue-900 p-4 shadow-md sticky top-0 z-50">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
-        <a href="index.php" class="flex items-center text-blue-600 font-semibold hover:underline">
+        <a href="index.php" class="flex items-center text-white font-semibold hover:underline">
             <i class="fas fa-arrow-left mr-2"></i>Kembali
         </a>
-        <div class="flex items-center gap-2 text-lg font-semibold text-gray-800">
-            <i class="fas fa-shopping-cart text-xl text-gray-700"></i>
+        <div class="flex items-center text-white  gap-2 text-lg font-semibold">
+            <i class="fas fa-shopping-cart text-xl text-white "></i>
             <span>Keranjang</span>
         </div>
     </div>
 </nav>
 
-<div class="max-w-4xl mx-auto px-4 py-6">
+<div class="max-w-4xl mx-auto px-4 py-6 bg-blue-50 ">
     <?php if (isset($_SESSION['pesan_sukses'])): ?>
         <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-800 rounded shadow">
             <?= $_SESSION['pesan_sukses']; ?>
