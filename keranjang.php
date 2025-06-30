@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['menu_id'])) {
     exit;
 }
 
-// Hapus item
+// Hapus item dari keranjang
 if (isset($_GET['hapus'])) {
     $hapus_id = (int) $_GET['hapus'];
     mysqli_query($db, "DELETE FROM keranjang WHERE id = $hapus_id AND session_id = '$session_id'");
@@ -104,11 +104,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </button>
 
                     <!-- Modal Hapus -->
-                    <div 
-                        x-show="showModal" 
-                        x-transition 
-                        class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
-                        style="display: none;">
+                    <div x-show="showModal" x-transition class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50" style="display: none;">
                         <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full text-center">
                             <h2 class="text-lg font-semibold mb-4">Hapus Item?</h2>
                             <p class="text-sm text-gray-600 mb-4">
@@ -133,7 +129,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <?php endif; ?>
 </div>
 
-<!-- Modal Checkout Slide-Up -->
+<!-- Modal Checkout -->
 <div 
     x-show="showCheckout"
     x-transition:enter="transition ease-out duration-300"
@@ -159,7 +155,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             <input type="text" name="wa" required placeholder="08xxxx" class="mt-1 w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div class="flex justify-center gap-4 mt-6">
-            <button type="button" @click="showCheckout = false" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+            <button type="button" @click="showCheckout = false" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
                 Batal
             </button>
             <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
