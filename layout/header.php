@@ -1,8 +1,6 @@
 <?php 
-include 'config/app.php'
+include 'config/app.php';
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,27 +36,20 @@ include 'config/app.php'
   <!-- summernote -->
   <link rel="stylesheet" href="assets-template/plugins/summernote/summernote-bs4.min.css">
 
+  <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.bootstrap5.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.bootstrap5.css">
 
   <!-- jQuery -->
   <script src="assets-template/plugins/jquery/jquery.min.js"></script>
-
-  
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-  <!-- Preloader -->
-  <!-- <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="assets-template/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div> -->
-
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
@@ -67,65 +58,70 @@ include 'config/app.php'
         <a href="index.php" class="nav-link">Home</a>
       </li>
     </ul>
-
-
   </nav>
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar elevation-4" style="background-color: #1e3a8a;"> <!-- blue-900 -->
+    
     <!-- Brand Logo -->
-<a href="dasboard.php" class="brand-link bg-dark text-white" style="text-decoration: none;">
-  <i class="fas fa-shopping-basket ml-2 mr-2"></i>
-  <span class="brand-text font-weight-bold">Iky Ecommerce</span>
-</a>
-
-
+    <a href="dasboard.php" class="brand-link text-white text-decoration-none">
+      <i class="fas fa-shopping-basket ml-2 mr-2"></i>
+      <span class="brand-text font-weight-bold">Iky Ecommerce</span>
+    </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
 
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-<nav class="mt-2">
-  <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-    
-    <li class="nav-header">Daftar Menu</li>
+          <li class="nav-header text-white">DAFTAR MENU</li>
 
-    <!-- Dashboard -->
-    <li class="nav-item">
-      <a href="dasboard.php" class="nav-link">
-        <i class="nav-icon fas fa-tachometer-alt"></i>
-        <p>Dashboard</p>
-      </a>
-    </li>
+          <!-- Dashboard -->
+          <li class="nav-item">
+            <a href="dasboard.php" class="nav-link text-white">
+              <i class="nav-icon fas fa-tachometer-alt text-white"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
 
-    <!-- Menu Makanan -->
-    <li class="nav-item">
-      <a href="makanan.php" class="nav-link">
-        <i class="nav-icon fas fa-utensils"></i>
-        <p>Data Makanan</p>
-      </a>
-    </li>
+          <!-- Data Makanan -->
+          <li class="nav-item">
+            <a href="makanan.php" class="nav-link text-white">
+              <i class="nav-icon fas fa-utensils text-white"></i>
+              <p>Data Makanan</p>
+            </a>
+          </li>
 
-    <!-- Data Akun -->
-    <li class="nav-item">
-      <a href="akun.php" class="nav-link">
-        <i class="nav-icon fas fa-users"></i>
-        <p>Data Akun</p>
-      </a>
-    </li>
+          <!-- Data Akun -->
+          <li class="nav-item">
+            <a href="akun.php" class="nav-link text-white">
+              <i class="nav-icon fas fa-users text-white"></i>
+              <p>Data Akun</p>
+            </a>
+          </li>
 
-    <!-- Logout -->
-    <li class="nav-item">
-      <a href="logout.php" class="nav-link" onclick="return confirm('Yakin Anda Ingin Keluar?');">
-        <i class="nav-icon fas fa-sign-out-alt"></i>
-        <p>Logout</p>
-      </a>
-    </li>
+          <!-- Logout -->
+          <li class="nav-item">
+            <a href="logout.php" class="nav-link text-white" onclick="return confirm('Yakin Anda Ingin Keluar?');">
+              <i class="nav-icon fas fa-sign-out-alt text-white"></i>
+              <p>Logout</p>
+            </a>
+          </li>
 
-  </ul>
-</nav>
+        </ul>
+      </nav>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
   </aside>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- Optional JS Scripts (for Bootstrap or other plugin initialization) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
