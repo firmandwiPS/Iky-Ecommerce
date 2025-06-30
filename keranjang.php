@@ -48,6 +48,15 @@ while ($row = mysqli_fetch_assoc($result)) {
     $menus[] = $row;
     $total_harga += $row['total'];
 }
+$keranjang_total = 0; // Tambahkan ini sebelum loop
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $menus[] = $row;
+    $total_harga += $row['total'];
+    $keranjang_total += $row['jumlah']; // Hitung total item
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -175,7 +184,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-end justify-center"
     style="display: none;"
 >
-    <form method="POST" action="checkout.php" class="bg-white rounded-t-2xl shadow-lg p-6 w-full max-w-md">
+    <form method="POST" action="checkout.php" class="bg-white rounded-t-2xl shadow-lg p-6 w-full max-w-md pb-20">
         <div class="text-center">
             <div class="w-12 h-1 bg-gray-400 rounded mx-auto mb-4"></div>
             <h2 class="text-lg font-semibold mb-4">Konfirmasi Pesanan</h2>
@@ -198,6 +207,47 @@ while ($row = mysqli_fetch_assoc($result)) {
         </div>
     </form>
 </div>
+
+
+
+<nav class="fixed bottom-0 inset-x-0 bg-white border-t shadow-md z-50">
+    <div class="flex justify-between items-center text-sm text-gray-500">
+        <!-- Home -->
+        <a href="index.php" class="flex flex-col items-center justify-center w-full py-2 text-blue-600 <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'text-blue-600 font-semibold' : '' ?>">
+            <i class="fas fa-home text-lg mb-1"></i>
+            <span class="text-xs">Beranda</span>
+        </a>
+
+<!-- Ulasan -->
+<a href="ulasan.php" class="flex flex-col items-center justify-center w-full py-2 text-yellow-500 <?= basename($_SERVER['PHP_SELF']) == 'ulasan.php' ? 'text-yellow-500 font-semibold' : '' ?>">
+    <i class="fas fa-star text-yellow-500 text-lg mb-1"></i>
+    <span class="text-xs">Ulasan</span>
+</a>
+
+
+        <!-- Keranjang (Tengah) -->
+        <a href="keranjang.php" class="relative -mt-6">
+            <div class="w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg border-4 border-white">
+                <i class="fas fa-shopping-cart text-2xl"></i>
+            </div>
+            <?php if ($keranjang_total > 0): ?>
+                <span class="absolute -top-1 -right-1 bg-red-600 text-white text-xs px-1.5 rounded-full"><?= $keranjang_total ?></span>
+            <?php endif; ?>
+        </a>
+
+        <!-- Lokasi -->
+        <a href="lokasi.php" class="flex flex-col items-center justify-center w-full py-2 text-red-600 <?= basename($_SERVER['PHP_SELF']) == 'lokasi.php' ? 'text-blue-600 font-semibold' : '' ?>">
+            <i class="fas fa-map-marker-alt text-lg mb-1"></i>
+            <span class="text-xs">Lokasi</span>
+        </a>
+
+        <!-- Chat Owner -->
+        <a href="https://wa.me/6281234567890" target="_blank" class="flex flex-col items-center justify-center w-full py-2 text-green-600">
+            <i class="fab fa-whatsapp text-lg mb-1"></i>
+            <span class="text-xs leading-tight">Chat Owner</span>
+        </a>
+    </div>
+</nav>
 
 </body>
 </html>
