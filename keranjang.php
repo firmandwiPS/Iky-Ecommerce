@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['menu_id'])) {
         mysqli_query($db, "INSERT INTO keranjang (session_id, menu_id, jumlah) VALUES ('$session_id', $menu_id, $jumlah)");
     }
 
-    $_SESSION['pesan_sukses'] = '✅ Pesanan berhasil ditambahkan ke keranjang.';
+    $_SESSION['pesan_sukses'] = 'Pesanan berhasil ditambahkan ke keranjang.';
+    $_SESSION['sweetalert'] = 'tambah';
     header("Location: keranjang.php");
     exit;
 }
@@ -26,7 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['menu_id'])) {
 if (isset($_GET['hapus'])) {
     $hapus_id = (int) $_GET['hapus'];
     mysqli_query($db, "DELETE FROM keranjang WHERE id = $hapus_id AND session_id = '$session_id'");
-    $_SESSION['pesan_sukses'] = '🗑️ Item berhasil dihapus.';
+    $_SESSION['pesan_sukses'] = 'Item berhasil dihapus dari keranjang.';
+    $_SESSION['sweetalert'] = 'hapus';
     header("Location: keranjang.php");
     exit;
 }
@@ -57,30 +59,62 @@ while ($row = mysqli_fetch_assoc($result)) {
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100 text-gray-800" x-data="{ showCheckout: false }">
+
+<!-- SweetAlert2 -->
+<?php if (isset($_SESSION['sweetalert'])): ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php if ($_SESSION['sweetalert'] === 'hapus'): ?>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil Dihapus!',
+                    text: 'Item telah dihapus dari keranjang.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            <?php elseif ($_SESSION['sweetalert'] === 'tambah'): ?>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Item ditambahkan ke keranjang.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            <?php elseif ($_SESSION['sweetalert'] === 'checkout'): ?>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pesanan Diproses!',
+                    text: 'Pesanan kamu berhasil diproses.',
+                    timer: 2500,
+                    showConfirmButton: false
+                });
+            <?php endif; ?>
+        });
+    </script>
+    <?php 
+    unset($_SESSION['sweetalert']); 
+    unset($_SESSION['pesan_sukses']);
+    ?>
+<?php endif; ?>
 
 <!-- Navbar -->
 <nav class="bg-blue-900 p-4 shadow-md sticky top-0 z-50">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
-        <a href="index.php" class="flex items-center text-white font-semibold hover:underline">
+        <a href="index.php" class="flex items-center text-white font-semibold no-underline hover:no-underline">
             <i class="fas fa-arrow-left mr-2"></i>Kembali
         </a>
-        <div class="flex items-center text-white  gap-2 text-lg font-semibold">
-            <i class="fas fa-shopping-cart text-xl text-white "></i>
+        <div class="flex items-center text-white gap-2 text-lg font-semibold">
+            <i class="fas fa-shopping-cart text-xl text-white"></i>
             <span>Keranjang</span>
         </div>
     </div>
 </nav>
 
-<div class="max-w-4xl mx-auto px-4 py-6 bg-blue-50 ">
-    <?php if (isset($_SESSION['pesan_sukses'])): ?>
-        <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-800 rounded shadow">
-            <?= $_SESSION['pesan_sukses']; ?>
-        </div>
-        <?php unset($_SESSION['pesan_sukses']); ?>
-    <?php endif; ?>
 
+<div class="max-w-4xl mx-auto px-4 py-6 bg-blue-50 ">
     <?php if (empty($menus)): ?>
         <div class="text-center text-gray-500 mt-20">
             <i class="fas fa-shopping-cart text-5xl mb-4"></i>
