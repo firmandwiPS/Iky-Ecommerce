@@ -2,100 +2,268 @@
 session_start();
 include 'config/app.php';
 
-$errorAuth = false;
-$errorRecaptcha = false;
+$title = 'KEDAISANTUY';
+$session_id = session_id();
 
-if (isset($_POST['login'])) {
-    $username = mysqli_real_escape_string($db, $_POST['username']);
-    $password = mysqli_real_escape_string($db, $_POST['password']);
+$daftar_kategori = [
+    'Makanan' => 'fa-utensils',
+    'Minuman' => 'fa-mug-hot',
+    'Snack'   => 'fa-cookie-bite'
+];
 
-    $secret_key = "6LfD7ggqAAAAALNBUQexKPIdtNNwegV148xucQME";
+$kategori_terpilih = $_GET['kategori'] ?? 'Semua';
+$keyword = $_GET['cari'] ?? '';
 
-    $verifikasi = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret_key . '&response=' . $_POST['g-recaptcha-response']);
-    $response = json_decode($verifikasi);
+$where = "1";
+if ($kategori_terpilih != 'Semua') {
+    $kategori_sql = mysqli_real_escape_string($db, $kategori_terpilih);
+    $where .= " AND kategori = '$kategori_sql'";
+}
+if ($keyword != '') {
+    $keyword_sql = mysqli_real_escape_string($db, $keyword);
+    $where .= " AND nama_makanan LIKE '%$keyword_sql%'";
+}
 
-    if ($response->success) {
-        $result = mysqli_query($db, "SELECT * FROM akun WHERE username = '$username'");
-        if (mysqli_num_rows($result) == 1) {
-            $hasil = mysqli_fetch_assoc($result);
-            if (password_verify($password, $hasil['password'])) {
-                $_SESSION['login'] = true;
-                $_SESSION['id_akun'] = $hasil['id_akun'];
-                $_SESSION['nama'] = $hasil['nama'];
-                $_SESSION['username'] = $hasil['username'];
-                $_SESSION['email'] = $hasil['email'];
-                $_SESSION['level'] = $hasil['level'];
-                header("Location: dasboard.php");
-                exit;
-            } else {
-                $errorAuth = true;
-                $errorMessage = "Password salah!";
-            }
-        } else {
-            $errorAuth = true;
-            $errorMessage = "Username tidak ditemukan!";
-        }
-    } else {
-        $errorRecaptcha = true;
-        $errorMessage = "Verifikasi reCAPTCHA gagal!";
-    }
+// Ambil data dari database
+$menus = mysqli_query($db, "SELECT * FROM makanan WHERE $where ORDER BY recommended DESC, id DESC");
+
+$keranjang_total = 0;
+$result = mysqli_query($db, "SELECT SUM(jumlah) as total FROM keranjang WHERE session_id = '$session_id'");
+if ($row = mysqli_fetch_assoc($result)) {
+    $keranjang_total = $row['total'] ?? 0;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Login | KEDAISANTUY</title>
+    <title><?= $title ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="bg-blue-50 flex items-center justify-center min-h-screen px-4">
+<body class="bg-blue-50 text-gray-800">
 
-<div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 md:p-8">
-    <div class="flex justify-center mb-6">
-        <img src="assets/img/logo.svg" alt="Logo" class="w-16 h-16">
+        <!-- Navbar -->
+        <nav
+        x-data="{ atTop: true }"
+        x-init="
+            atTop = window.scrollY <= 0;
+            window.addEventListener('scroll', () => {
+            atTop = window.scrollY <= 0;
+            });
+        "
+        :class="atTop 
+            ? 'bg-blue-900 bg-opacity-100 backdrop-blur-0 translate-y-0' 
+            : 'bg-blue-900 bg-opacity-70 backdrop-blur-md shadow-md translate-y-0'"
+        class="fixed top-0 left-0 right-0 z-50 text-white px-4 py-3 flex justify-between items-center transition-all duration-300 ease-in-out"
+        >
+        <div class="text-xl font-bold">KEDAISANTUY</div>
+        <div class="flex items-center gap-4">
+            <a href="login.php" class="bg-white text-blue-800 px-3 py-1.5 rounded-full text-sm font-medium shadow">
+            <i class="fas fa-user"></i>
+            </a>
+            <a href="keranjang.php" class="relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <?php if ($keranjang_total > 0): ?>
+                <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 rounded-full"><?= $keranjang_total ?></span>
+            <?php endif; ?>
+            </a>
+        </div>
+        </nav>
+
+<div class="pt-20 pb-6 bg-blue-900">
+
+    <!-- Pencarian Sticky -->
+    <div
+        class="bg-blue-900 px-4 py-4 sticky top-[64px] z-40 shadow-md transition-all duration-300 ease-in-out transform"
+        x-data="{ visible: true }"
+        x-init="let lastScroll = window.pageYOffset;
+                window.addEventListener('scroll', () => {
+                    const current = window.pageYOffset;
+                    visible = current < lastScroll || current < 80;
+                    lastScroll = current;
+                });"
+        :class="{ 'translate-y-0 opacity-100': visible, '-translate-y-full opacity-0': !visible }"
+    >
+        <form method="GET" class="flex items-center gap-2">
+            <input
+                type="text"
+                name="cari"
+                placeholder="Cari menu..."
+                value="<?= htmlspecialchars($keyword); ?>"
+                class="w-full px-4 py-2 rounded-full text-sm shadow focus:outline-none"
+            >
+            <button type="submit" class="text-white text-xl">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
     </div>
 
-    <h2 class="text-center text-2xl font-bold text-blue-900 mb-4">Silakan Login</h2>
+</div>
 
-    <?php if ($errorAuth || $errorRecaptcha): ?>
-        <div class="bg-red-100 border border-red-400 text-red-700 text-sm px-4 py-2 rounded mb-4">
-            <?= htmlspecialchars($errorMessage); ?>
+
+<!-- Kategori -->
+<div class="px-4 py-6 bg-blue-50 rounded-t-3xl -mt-4">
+    <h2 class="text-xl font-bold mb-4">Kategori Menu</h2>
+    <div class="flex gap-6 overflow-x-auto pb-1">
+        <!-- Semua -->
+        <a href="index.php?kategori=Semua" class="flex flex-col items-center text-center min-w-[64px]">
+            <div class="<?= $kategori_terpilih == 'Semua' ? 'bg-blue-100 text-blue-700' : 'bg-white text-blue-800'; ?> w-16 h-16 flex items-center justify-center rounded-full border shadow-sm">
+                <i class="fas fa-list text-xl"></i>
+            </div>
+            <span class="text-sm mt-1 font-medium">Semua</span>
+        </a>
+
+        <!-- Kategori Lainnya -->
+        <?php foreach ($daftar_kategori as $kategori => $ikon): ?>
+            <a href="index.php?kategori=<?= urlencode($kategori); ?>" class="flex flex-col items-center text-center min-w-[64px]">
+                <div class="<?= $kategori_terpilih == $kategori ? 'bg-blue-100 text-blue-700' : 'bg-white text-blue-800'; ?> w-16 h-16 flex items-center justify-center rounded-full border shadow-sm">
+                    <i class="fas <?= $ikon ?> text-xl"></i>
+                </div>
+                <span class="text-sm mt-1 font-medium"><?= htmlspecialchars($kategori) ?></span>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<!-- Daftar Menu -->
+<div class="px-4 pb-20 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-blue-50">
+    <?php
+    $recommendedMenus = [];
+    $otherMenus = [];
+
+    while ($menu = mysqli_fetch_assoc($menus)) {
+        if ($menu['recommended'] === 'Ya') {
+            $recommendedMenus[] = $menu;
+        } else {
+            $otherMenus[] = $menu;
+        }
+    }
+
+    $mergedMenus = [];
+    $max = max(count($recommendedMenus), count($otherMenus));
+    for ($i = 0; $i < $max; $i++) {
+        if (isset($recommendedMenus[$i])) $mergedMenus[] = $recommendedMenus[$i];
+        if (isset($otherMenus[$i])) $mergedMenus[] = $otherMenus[$i];
+    }
+
+    if (count($mergedMenus) > 0):
+        foreach ($mergedMenus as $menu):
+    ?>
+    <div 
+        x-data="{
+            open: false,
+            jumlah: 1,
+            tambahKeranjang() {
+                fetch('keranjang.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `menu_id=<?= $menu['id']; ?>&jumlah=${this.jumlah}`
+                }).then(res => {
+                    if (res.ok) {
+                        localStorage.setItem('notif_keranjang', '1');
+                        location.reload();
+                    }
+                });
+            }
+        }"
+    >
+        <div 
+            @click="open = true" 
+            class="bg-white rounded-2xl shadow hover:shadow-lg transition-all duration-200 cursor-pointer overflow-hidden flex flex-col relative"
+        >
+            <div class="relative">
+                <img 
+                    src="gambar/<?= htmlspecialchars($menu['gambar']); ?>" 
+                    class="w-full h-36 object-cover"
+                    alt="<?= htmlspecialchars($menu['nama_makanan']); ?>"
+                >
+                <?php if ($menu['recommended'] === 'Ya'): ?>
+                <div class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md bg-opacity-90">
+                    ⭐ Recommended
+                </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="p-4 flex flex-col flex-grow justify-between">
+                <div>
+                    <h3 class="font-semibold text-blue-900 text-base line-clamp-1">
+                        <?= htmlspecialchars($menu['nama_makanan']); ?>
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1 line-clamp-2">
+                        <?= htmlspecialchars($menu['deskripsi']); ?>
+                    </p>
+                </div>
+                <p class="text-blue-700 font-bold text-sm mt-3">
+                    Rp <?= number_format($menu['harga'], 0, ',', '.'); ?>
+                </p>
+            </div>
         </div>
+
+        <!-- Modal -->
+        <div
+            x-show="open"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-20"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-20"
+            @keydown.escape.window="open = false"
+            @click.outside="open = false"
+            class="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-end justify-center"
+        >
+            <div class="bg-white w-full max-w-md p-6 rounded-t-3xl">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-semibold"><?= htmlspecialchars($menu['nama_makanan']); ?></h2>
+                    <button @click="open = false" class="text-gray-500 hover:text-red-500 transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <img src="gambar/<?= htmlspecialchars($menu['gambar']); ?>" class="w-full h-44 object-cover rounded mb-3">
+                <p class="text-sm text-gray-600 mb-2"><?= htmlspecialchars($menu['deskripsi']); ?></p>
+                <p class="font-bold text-black text-base mb-4">Rp <?= number_format($menu['harga'], 0, ',', '.'); ?></p>
+
+                <form @submit.prevent="tambahKeranjang" class="flex flex-col gap-3">
+                    <label class="text-sm text-gray-700 block mb-1">Jumlah</label>
+                    <div class="flex items-center justify-center gap-2">
+                        <button type="button" @click="if(jumlah > 1) jumlah--" class="bg-gray-200 text-xl w-10 h-10 rounded-full">−</button>
+                        <input type="number" name="jumlah" x-model="jumlah" min="1" class="text-xl w-20 text-center border rounded p-2" required>
+                        <button type="button" @click="jumlah++" class="bg-gray-200 text-xl w-10 h-10 rounded-full">+</button>
+                    </div>
+                    <button type="submit" class="bg-blue-700 text-white py-2 rounded-lg hover:bg-blue-800 transition">
+                        Tambah ke Keranjang
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+    <?php else: ?>
+        <div class="col-span-full text-center text-gray-500">Menu tidak ditemukan.</div>
     <?php endif; ?>
+</div>
 
-    <form method="POST" class="space-y-4">
-        <div>
-            <label class="block text-sm text-blue-900 font-medium mb-1" for="username">
-                <i class="fas fa-user mr-1"></i> Username
-            </label>
-            <input type="text" name="username" id="username" required
-                   class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-        </div>
-
-        <div>
-            <label class="block text-sm text-blue-900 font-medium mb-1" for="password">
-                <i class="fas fa-lock mr-1"></i> Password
-            </label>
-            <input type="password" name="password" id="password" required
-                   class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-        </div>
-
-        <div class="flex justify-center">
-            <div class="g-recaptcha" data-sitekey="6LfD7ggqAAAAAI6xTRycQzsNyt5f2b2fq0vi5XTN"></div>
-        </div>
-
-        <button type="submit" name="login"
-                class="w-full bg-blue-700 hover:bg-blue-800 text-white font-medium py-2 rounded-lg transition">
-            Login
-        </button>
-    </form>
-
-    <div class="text-center text-sm text-gray-500 mt-4">
-        Belum punya akun? <a href="register.php" class="text-blue-600 hover:underline">Daftar</a>
+<!-- Notifikasi -->
+<div
+    x-data="{ showNotif: false }"
+    x-init="if (localStorage.getItem('notif_keranjang')) {
+        showNotif = true;
+        setTimeout(() => {
+            showNotif = false;
+            localStorage.removeItem('notif_keranjang');
+        }, 2000);
+    }"
+    x-show="showNotif"
+    x-transition
+    class="fixed bottom-6 inset-x-0 flex justify-center z-50"
+    style="display: none;"
+>
+    <div class="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-lg">
+        ✅ Menu berhasil ditambahkan ke keranjang!
     </div>
 </div>
 
