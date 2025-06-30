@@ -122,7 +122,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         <div class="text-right mt-6">
             <p class="text-lg font-bold">Total: Rp <?= number_format($total_harga, 0, ',', '.'); ?></p>
-            <button @click="showCheckout = true" class="mt-4 inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
+            <button @click="showCheckout = true" class="mt-4 inline-block bg-blue-900 text-white px-6 py-2 rounded transition">
                 Checkout Sekarang
             </button>
         </div>
@@ -158,7 +158,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             <button type="button" @click="showCheckout = false" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
                 Batal
             </button>
-            <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+            <button type="submit" class="px-4 py-2 bg-blue-900 text-white rounded transition">
                 Proses Pesanan
             </button>
         </div>

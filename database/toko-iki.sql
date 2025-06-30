@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 30, 2025 at 12:54 AM
+-- Generation Time: Jun 30, 2025 at 08:47 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -61,7 +61,7 @@ CREATE TABLE `keranjang` (
 --
 
 INSERT INTO `keranjang` (`id`, `session_id`, `menu_id`, `jumlah`) VALUES
-(15, 'gghjk574gkug3k0lhv1ieha9on', 8, 1);
+(23, 'gghjk574gkug3k0lhv1ieha9on', 8, 1);
 
 -- --------------------------------------------------------
 
@@ -76,16 +76,44 @@ CREATE TABLE `makanan` (
   `kategori` varchar(50) DEFAULT NULL,
   `deskripsi` text,
   `gambar` varchar(255) DEFAULT NULL,
-  `stok` int NOT NULL DEFAULT '0'
+  `stok` int NOT NULL DEFAULT '0',
+  `recommended` varchar(10) NOT NULL DEFAULT 'Tidak'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `makanan`
 --
 
-INSERT INTO `makanan` (`id`, `nama_makanan`, `harga`, `kategori`, `deskripsi`, `gambar`, `stok`) VALUES
-(7, 'cireng', 2000, 'Snack', 'enak', '6861d425925ce-Malaz.png', 20),
-(8, 'baso', 15000, 'Makanan', 'enak', '6861d443d1705-Kiko.jpg', 30);
+INSERT INTO `makanan` (`id`, `nama_makanan`, `harga`, `kategori`, `deskripsi`, `gambar`, `stok`, `recommended`) VALUES
+(7, 'cireng', 2000, 'Snack', 'enak', '6861d425925ce-Malaz.png', 20, 'Ya'),
+(8, 'baso', 15000, 'Makanan', 'enak', '6861d443d1705-Kiko.jpg', 30, 'Ya'),
+(9, 'es teh ', 3000, 'Minuman', 'enak', '686243447c799-A logo of a crow.jpeg', 20, 'Ya'),
+(10, 'pangsit', 9000, 'Snack', 'enak', '686247196fe33-A logo of a crow.jpeg', 20, 'Ya'),
+(11, 'mie ayam', 20000, 'Makanan', 'enak', '6862474d4a8e2-Screenshot 2025-06-30 141246.png', 20, 'Tidak');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pesanan`
+--
+
+CREATE TABLE `pesanan` (
+  `id` int NOT NULL,
+  `nama_pelanggan` varchar(100) NOT NULL,
+  `no_wa` varchar(20) NOT NULL,
+  `detail` text NOT NULL,
+  `total` int NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'Sedang diproses',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pesanan`
+--
+
+INSERT INTO `pesanan` (`id`, `nama_pelanggan`, `no_wa`, `detail`, `total`, `status`, `created_at`) VALUES
+(6, 'firman', '08626277463', 'baso x 1 = Rp 15.000\n', 15000, 'Sedang diproses', '2025-06-30 01:27:50'),
+(7, 'firman', '08626277463', 'baso x 2 = Rp 30.000\n', 30000, 'Sedang diproses', '2025-06-30 01:30:21');
 
 --
 -- Indexes for dumped tables
@@ -110,6 +138,12 @@ ALTER TABLE `makanan`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `pesanan`
+--
+ALTER TABLE `pesanan`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -123,13 +157,19 @@ ALTER TABLE `akun`
 -- AUTO_INCREMENT for table `keranjang`
 --
 ALTER TABLE `keranjang`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `makanan`
 --
 ALTER TABLE `makanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `pesanan`
+--
+ALTER TABLE `pesanan`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

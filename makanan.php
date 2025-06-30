@@ -9,17 +9,15 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
-
 $title = 'Data Makanan';
 include 'layout/header.php';
 $data_makanan = select("SELECT * FROM makanan");
 
 // Tambah makanan
 if (isset($_POST['tambah'])) {
-    // Convert Rupiah to number before saving
     $_POST['harga'] = str_replace(['Rp', '.', ' '], '', $_POST['harga']);
     $_POST['harga'] = (int)$_POST['harga'];
-    
+
     if (tambah_makanan($_POST) > 0) {
         echo "<script>alert('Data berhasil ditambahkan!'); document.location.href='makanan.php';</script>";
     } else {
@@ -29,10 +27,9 @@ if (isset($_POST['tambah'])) {
 
 // Ubah makanan
 if (isset($_POST['ubah'])) {
-    // Convert Rupiah to number before saving
     $_POST['harga'] = str_replace(['Rp', '.', ' '], '', $_POST['harga']);
     $_POST['harga'] = (int)$_POST['harga'];
-    
+
     if (update_makanan($_POST) > 0) {
         echo "<script>alert('Data berhasil diubah!'); document.location.href='makanan.php';</script>";
     } else {
@@ -73,6 +70,7 @@ if (isset($_POST['ubah'])) {
                                 <th>Stok</th>
                                 <th>Deskripsi</th>
                                 <th>Gambar</th>
+                                <th>Recommended</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -86,12 +84,13 @@ if (isset($_POST['ubah'])) {
                                     <td><?= $makanan['stok']; ?></td>
                                     <td><?= htmlspecialchars($makanan['deskripsi']); ?></td>
                                     <td><img src="gambar/<?= $makanan['gambar']; ?>" width="60" class="img-thumbnail"></td>
-                                    <td width="15%" class="text-center">
+                                    <td><?= $makanan['recommended']; ?></td>
+                                    <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $makanan['id']; ?>">
-                                            <i class="fas fa-edit text-white"></i>
+                                            <i class="fas fa-edit"></i>
                                         </button>
                                         <a href="hapus-makanan.php?id=<?= $makanan['id']; ?>" class="btn btn-sm btn-danger text-white" onclick="return confirm('Yakin hapus data ini?')">
-                                            <i class="fas fa-trash-alt text-white"></i>
+                                            <i class="fas fa-trash-alt"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -144,6 +143,14 @@ if (isset($_POST['ubah'])) {
                                                         <label>Gambar (kosongkan jika tidak diubah)</label>
                                                         <input type="file" name="gambar" class="form-control">
                                                         <input type="hidden" name="gambar_lama" value="<?= $makanan['gambar']; ?>">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label>Recommended</label>
+                                                        <select name="recommended" class="form-control" required>
+                                                            <option value="Ya" <?= $makanan['recommended'] == 'Ya' ? 'selected' : '' ?>>Ya</option>
+                                                            <option value="Tidak" <?= $makanan['recommended'] == 'Tidak' ? 'selected' : '' ?>>Tidak</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -210,6 +217,15 @@ if (isset($_POST['ubah'])) {
                     <div class="mb-3">
                         <label>Gambar</label>
                         <input type="file" name="gambar" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Recommended</label>
+                        <select name="recommended" class="form-control" required>
+                            <option value="">-- Pilih Status --</option>
+                            <option value="Ya">Ya</option>
+                            <option value="Tidak">Tidak</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
