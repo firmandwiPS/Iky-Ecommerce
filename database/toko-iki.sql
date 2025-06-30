@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 27, 2025 at 05:58 PM
+-- Generation Time: Jun 30, 2025 at 12:54 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -46,6 +46,26 @@ INSERT INTO `akun` (`id_akun`, `nama`, `username`, `email`, `password`, `level`)
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `keranjang`
+--
+
+CREATE TABLE `keranjang` (
+  `id` int NOT NULL,
+  `session_id` varchar(255) NOT NULL,
+  `menu_id` int NOT NULL,
+  `jumlah` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `keranjang`
+--
+
+INSERT INTO `keranjang` (`id`, `session_id`, `menu_id`, `jumlah`) VALUES
+(15, 'gghjk574gkug3k0lhv1ieha9on', 8, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `makanan`
 --
 
@@ -60,6 +80,14 @@ CREATE TABLE `makanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
+-- Dumping data for table `makanan`
+--
+
+INSERT INTO `makanan` (`id`, `nama_makanan`, `harga`, `kategori`, `deskripsi`, `gambar`, `stok`) VALUES
+(7, 'cireng', 2000, 'Snack', 'enak', '6861d425925ce-Malaz.png', 20),
+(8, 'baso', 15000, 'Makanan', 'enak', '6861d443d1705-Kiko.jpg', 30);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -68,6 +96,12 @@ CREATE TABLE `makanan` (
 --
 ALTER TABLE `akun`
   ADD PRIMARY KEY (`id_akun`);
+
+--
+-- Indexes for table `keranjang`
+--
+ALTER TABLE `keranjang`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `makanan`
@@ -86,10 +120,16 @@ ALTER TABLE `akun`
   MODIFY `id_akun` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
+-- AUTO_INCREMENT for table `keranjang`
+--
+ALTER TABLE `keranjang`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT for table `makanan`
 --
 ALTER TABLE `makanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
