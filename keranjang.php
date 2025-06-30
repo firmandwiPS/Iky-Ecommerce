@@ -3,49 +3,48 @@ session_start();
 include 'config/app.php';
 
 $title = 'Keranjang Belanja';
+$session_id = session_id();
 
-// Tambah ke keranjang jika ada POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Tambah item ke keranjang
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['menu_id'])) {
     $menu_id = (int) $_POST['menu_id'];
-    $jumlah = (int) $_POST['jumlah'];
+    $jumlah = max(1, (int) $_POST['jumlah']);
 
-    if (!isset($_SESSION['keranjang'])) {
-        $_SESSION['keranjang'] = [];
-    }
-
-    if (isset($_SESSION['keranjang'][$menu_id])) {
-        $_SESSION['keranjang'][$menu_id] += $jumlah;
+    $cek = mysqli_query($db, "SELECT * FROM keranjang WHERE session_id = '$session_id' AND menu_id = $menu_id");
+    if (mysqli_num_rows($cek) > 0) {
+        mysqli_query($db, "UPDATE keranjang SET jumlah = jumlah + $jumlah WHERE session_id = '$session_id' AND menu_id = $menu_id");
     } else {
-        $_SESSION['keranjang'][$menu_id] = $jumlah;
+        mysqli_query($db, "INSERT INTO keranjang (session_id, menu_id, jumlah) VALUES ('$session_id', $menu_id, $jumlah)");
     }
 
-    $_SESSION['pesan_sukses'] = '✅ Pesanan berhasil ditambahkan ke keranjang. Terima kasih!';
+    $_SESSION['pesan_sukses'] = '✅ Pesanan berhasil ditambahkan ke keranjang.';
     header("Location: keranjang.php");
     exit;
-}
-
-// Ambil keranjang
-$keranjang = $_SESSION['keranjang'] ?? [];
-$menus = [];
-$total_harga = 0;
-
-if (!empty($keranjang)) {
-    $menu_ids = implode(',', array_map('intval', array_keys($keranjang)));
-    $result = mysqli_query($db, "SELECT * FROM makanan WHERE id IN ($menu_ids)");
-    while ($row = mysqli_fetch_assoc($result)) {
-        $row['jumlah'] = $keranjang[$row['id']];
-        $row['total'] = $row['jumlah'] * $row['harga'];
-        $menus[] = $row;
-        $total_harga += $row['total'];
-    }
 }
 
 // Hapus item
 if (isset($_GET['hapus'])) {
-    $hapus_id = (int)$_GET['hapus'];
-    unset($_SESSION['keranjang'][$hapus_id]);
+    $hapus_id = (int) $_GET['hapus'];
+    mysqli_query($db, "DELETE FROM keranjang WHERE id = $hapus_id AND session_id = '$session_id'");
+    $_SESSION['pesan_sukses'] = '🗑️ Item berhasil dihapus.';
     header("Location: keranjang.php");
     exit;
+}
+
+// Ambil isi keranjang
+$menus = [];
+$total_harga = 0;
+
+$result = mysqli_query($db, "
+    SELECT k.id AS keranjang_id, m.*, k.jumlah, (m.harga * k.jumlah) AS total 
+    FROM keranjang k 
+    JOIN makanan m ON k.menu_id = m.id 
+    WHERE k.session_id = '$session_id'
+");
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $menus[] = $row;
+    $total_harga += $row['total'];
 }
 ?>
 
@@ -56,55 +55,118 @@ if (isset($_GET['hapus'])) {
     <title><?= $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100 text-gray-800" x-data="{ showCheckout: false }">
 
 <!-- Navbar -->
-<nav class="p-4 bg-white shadow flex justify-between items-center sticky top-0 z-10">
-    <a href="index.php" class="text-lg font-bold text-blue-600">← Kembali</a>
-    <div class="text-lg font-semibold">Keranjang</div>
+<nav class="bg-white p-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+        <a href="index.php" class="flex items-center text-blue-600 font-semibold hover:underline">
+            <i class="fas fa-arrow-left mr-2"></i>Kembali
+        </a>
+        <div class="flex items-center gap-2 text-lg font-semibold text-gray-800">
+            <i class="fas fa-shopping-cart text-xl text-gray-700"></i>
+            <span>Keranjang</span>
+        </div>
+    </div>
 </nav>
 
-<!-- Konten -->
-<div class="max-w-4xl mx-auto p-4">
+<div class="max-w-4xl mx-auto px-4 py-6">
     <?php if (isset($_SESSION['pesan_sukses'])): ?>
-        <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-800 rounded-lg shadow">
+        <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-800 rounded shadow">
             <?= $_SESSION['pesan_sukses']; ?>
         </div>
         <?php unset($_SESSION['pesan_sukses']); ?>
     <?php endif; ?>
 
     <?php if (empty($menus)): ?>
-        <div class="text-center py-10 text-gray-500">
-            <i class="fas fa-shopping-cart text-4xl mb-4"></i>
-            <p>Keranjang belanja kamu kosong.</p>
-            <a href="index.php" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Lihat Menu</a>
+        <div class="text-center text-gray-500 mt-20">
+            <i class="fas fa-shopping-cart text-5xl mb-4"></i>
+            <p>Keranjang kamu masih kosong.</p>
+            <a href="index.php" class="inline-block mt-6 bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
+                Lihat Menu
+            </a>
         </div>
     <?php else: ?>
-        <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="bg-white rounded-xl shadow overflow-hidden">
             <?php foreach ($menus as $menu): ?>
-                <div class="flex items-center border-b p-4">
-                    <img src="gambar/<?= htmlspecialchars($menu['gambar']); ?>" class="w-20 h-20 object-cover rounded-lg mr-4">
+                <div class="flex items-center gap-4 p-4 border-b" x-data="{ showModal: false }">
+                    <img src="gambar/<?= htmlspecialchars($menu['gambar']); ?>" class="w-20 h-20 object-cover rounded-lg">
                     <div class="flex-1">
-                        <h3 class="font-semibold"><?= htmlspecialchars($menu['nama_makanan']); ?></h3>
-                        <p class="text-sm text-gray-500">Rp <?= number_format($menu['harga'], 0, ',', '.'); ?> x <?= $menu['jumlah']; ?></p>
-                        <p class="text-sm text-gray-700 font-semibold mt-1">Subtotal: Rp <?= number_format($menu['total'], 0, ',', '.'); ?></p>
+                        <h3 class="font-semibold text-gray-800"><?= htmlspecialchars($menu['nama_makanan']); ?></h3>
+                        <p class="text-sm text-gray-600">Rp <?= number_format($menu['harga'], 0, ',', '.'); ?> x <?= $menu['jumlah']; ?></p>
+                        <p class="text-sm font-semibold text-gray-700 mt-1">Subtotal: Rp <?= number_format($menu['total'], 0, ',', '.'); ?></p>
                     </div>
-                    <a href="?hapus=<?= $menu['id']; ?>" class="text-red-500 hover:text-red-700">
+                    <button @click="showModal = true" class="text-red-500 hover:text-red-700" title="Hapus">
                         <i class="fas fa-trash"></i>
-                    </a>
+                    </button>
+
+                    <!-- Modal Hapus -->
+                    <div 
+                        x-show="showModal" 
+                        x-transition 
+                        class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+                        style="display: none;">
+                        <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full text-center">
+                            <h2 class="text-lg font-semibold mb-4">Hapus Item?</h2>
+                            <p class="text-sm text-gray-600 mb-4">
+                                Yakin ingin menghapus <strong><?= htmlspecialchars($menu['nama_makanan']); ?></strong> dari keranjang?
+                            </p>
+                            <div class="flex justify-center gap-4">
+                                <button @click="showModal = false" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">Batal</button>
+                                <a href="?hapus=<?= $menu['keranjang_id']; ?>" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">Hapus</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
 
-        <div class="mt-6 text-right">
-            <p class="text-lg font-semibold">Total: Rp <?= number_format($total_harga, 0, ',', '.'); ?></p>
-            <a href="checkout.php" class="inline-block mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
-                Checkout
-            </a>
+        <div class="text-right mt-6">
+            <p class="text-lg font-bold">Total: Rp <?= number_format($total_harga, 0, ',', '.'); ?></p>
+            <button @click="showCheckout = true" class="mt-4 inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
+                Checkout Sekarang
+            </button>
         </div>
     <?php endif; ?>
+</div>
+
+<!-- Modal Checkout Slide-Up -->
+<div 
+    x-show="showCheckout"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="translate-y-full opacity-0"
+    x-transition:enter-end="translate-y-0 opacity-100"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="translate-y-0 opacity-100"
+    x-transition:leave-end="translate-y-full opacity-0"
+    class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-end justify-center"
+    style="display: none;"
+>
+    <form method="POST" action="checkout.php" class="bg-white rounded-t-2xl shadow-lg p-6 w-full max-w-md">
+        <div class="text-center">
+            <div class="w-12 h-1 bg-gray-400 rounded mx-auto mb-4"></div>
+            <h2 class="text-lg font-semibold mb-4">Konfirmasi Pesanan</h2>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Nama</label>
+            <input type="text" name="nama" required class="mt-1 w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Nomor WhatsApp</label>
+            <input type="text" name="wa" required placeholder="08xxxx" class="mt-1 w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex justify-center gap-4 mt-6">
+            <button type="button" @click="showCheckout = false" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">
+                Batal
+            </button>
+            <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                Proses Pesanan
+            </button>
+        </div>
+    </form>
 </div>
 
 </body>
