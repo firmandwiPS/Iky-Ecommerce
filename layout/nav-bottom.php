@@ -20,7 +20,7 @@
                 <span class="absolute -top-1 -right-1 bg-red-600 text-white text-xs px-1.5 rounded-full"><?= $keranjang_total ?></span>
             <?php endif; ?>
         </a>
-        <a href="lokasi.php" class="flex flex-col items-center justify-center w-full py-2 <?= basename($_SERVER['PHP_SELF']) == 'lokasi.php' ? ' font-semibold' : 'text-red-600' ?>">
+        <a href="lokasi.php" class="flex flex-col items-center justify-center w-full py-2 <?= basename($_SERVER['PHP_SELF']) == 'lokasi.php' ? 'text-red-600  font-semibold' : 'text-red-600' ?>">
             <i class="fas fa-map-marker-alt text-lg mb-1"></i>
             <span class="text-xs">Lokasi</span>
         </a>
