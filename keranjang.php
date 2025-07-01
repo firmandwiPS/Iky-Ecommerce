@@ -70,7 +70,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body class="bg-gray-100 text-gray-800" x-data="{ showCheckout: false }">
+<body class="bg-blue-50 text-gray-800" x-data="{ showCheckout: false }">
 
 <!-- SweetAlert2 -->
 <?php if (isset($_SESSION['sweetalert'])): ?>
@@ -198,7 +198,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             <input type="text" name="wa" required placeholder="08xxxx" class="mt-1 w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div class="flex justify-center gap-4 mt-6">
-            <button type="button" @click="showCheckout = false" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+            <button type="button" @click="showCheckout = false" class="px-4 py-2 bg-red-600 text-white rounded transition">
                 Batal
             </button>
             <button type="submit" class="px-4 py-2 bg-blue-900 text-white rounded transition">
@@ -210,44 +210,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 
 
-<nav class="fixed bottom-0 inset-x-0 bg-white border-t shadow-md z-50">
-    <div class="flex justify-between items-center text-sm text-gray-500">
-        <!-- Home -->
-        <a href="index.php" class="flex flex-col items-center justify-center w-full py-2 text-blue-600 <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'text-blue-600 font-semibold' : '' ?>">
-            <i class="fas fa-home text-lg mb-1"></i>
-            <span class="text-xs">Beranda</span>
-        </a>
-
-<!-- Ulasan -->
-<a href="ulasan.php" class="flex flex-col items-center justify-center w-full py-2 text-yellow-500 <?= basename($_SERVER['PHP_SELF']) == 'ulasan.php' ? 'text-yellow-500 font-semibold' : '' ?>">
-    <i class="fas fa-star text-yellow-500 text-lg mb-1"></i>
-    <span class="text-xs">Ulasan</span>
-</a>
-
-
-        <!-- Keranjang (Tengah) -->
-        <a href="keranjang.php" class="relative -mt-6">
-            <div class="w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg border-4 border-white">
-                <i class="fas fa-shopping-cart text-2xl"></i>
-            </div>
-            <?php if ($keranjang_total > 0): ?>
-                <span class="absolute -top-1 -right-1 bg-red-600 text-white text-xs px-1.5 rounded-full"><?= $keranjang_total ?></span>
-            <?php endif; ?>
-        </a>
-
-        <!-- Lokasi -->
-        <a href="lokasi.php" class="flex flex-col items-center justify-center w-full py-2 text-red-600 <?= basename($_SERVER['PHP_SELF']) == 'lokasi.php' ? 'text-blue-600 font-semibold' : '' ?>">
-            <i class="fas fa-map-marker-alt text-lg mb-1"></i>
-            <span class="text-xs">Lokasi</span>
-        </a>
-
-        <!-- Chat Owner -->
-        <a href="https://wa.me/6281234567890" target="_blank" class="flex flex-col items-center justify-center w-full py-2 text-green-600">
-            <i class="fab fa-whatsapp text-lg mb-1"></i>
-            <span class="text-xs leading-tight">Chat Owner</span>
-        </a>
-    </div>
-</nav>
+<?php include 'layout/nav-bottom.php'; ?>
 
 </body>
 </html>

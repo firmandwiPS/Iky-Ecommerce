@@ -110,7 +110,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 <?php if (mysqli_num_rows($recommendedMenus) > 0): ?>
     <div class="px-4 pb-2">
         <h3 class="text-lg font-semibold text-blue-900 mb-2">⭐ Menu Recommended</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-8 gap-4">
             <?php while ($menu = mysqli_fetch_assoc($recommendedMenus)): ?>
                 <div x-data="{
                     open: false,
@@ -135,20 +135,28 @@ if ($row = mysqli_fetch_assoc($result)) {
                     }
                 }">
                     <div @click="open = true" class="bg-white rounded-2xl shadow hover:shadow-lg transition-all duration-200 cursor-pointer overflow-hidden flex flex-col relative">
+                        <!-- Gambar -->
                         <div class="relative">
-                            <img src="gambar/<?= htmlspecialchars($menu['gambar']); ?>" class="w-full h-36 object-cover" alt="<?= htmlspecialchars($menu['nama_makanan']); ?>">
-                            <div class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md bg-opacity-90">
-                                ⭐ Recommended
+                            <img src="gambar/<?= htmlspecialchars($menu['gambar']); ?>" alt="<?= htmlspecialchars($menu['nama_makanan']); ?>"
+                                class="w-full aspect-[3/2] object-cover" />
+                            <div class="absolute top-0 left-0 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow bg-opacity-40">
+                                ⭐
                             </div>
                         </div>
-                        <div class="p-4 flex flex-col flex-grow justify-between">
-                            <div>
+
+                        <!-- Konten -->
+                        <div class="p-3 flex flex-col justify-between flex-grow">
+                            <!-- Judul dan Deskripsi -->
+                            <div class="mb-2">
                                 <h3 class="font-semibold text-blue-900 text-base line-clamp-1"><?= htmlspecialchars($menu['nama_makanan']); ?></h3>
-                                <p class="text-sm text-gray-500 mt-1 line-clamp-2"><?= htmlspecialchars($menu['deskripsi']); ?></p>
+                                <p class="text-sm text-gray-500 line-clamp-2"><?= htmlspecialchars($menu['deskripsi']); ?></p>
                             </div>
-                            <p class="text-blue-700 font-bold text-sm mt-3">Rp <?= number_format($menu['harga'], 0, ',', '.'); ?></p>
+
+                            <!-- Harga -->
+                            <p class="text-blue-700 font-bold text-sm mt-auto">Rp <?= number_format($menu['harga'], 0, ',', '.'); ?></p>
                         </div>
                     </div>
+
 
                     <!-- Modal dengan animasi -->
                     <div x-show="open"
@@ -190,7 +198,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 <?php if (mysqli_num_rows($allMenus) > 0): ?>
     <div class="px-4 pb-20 mt-6">
         <h3 class="text-lg font-semibold text-blue-900 mb-2">📋 Semua Menu</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-8 gap-4">
             <?php while ($menu = mysqli_fetch_assoc($allMenus)): ?>
                 <div x-data="{
                     open: false,
@@ -214,18 +222,34 @@ if ($row = mysqli_fetch_assoc($result)) {
                         });
                     }
                 }">
-                    <div @click="open = true" class="bg-white rounded-2xl shadow hover:shadow-lg transition-all duration-200 cursor-pointer overflow-hidden flex flex-col relative">
-                        <div class="relative">
-                            <img src="gambar/<?= htmlspecialchars($menu['gambar']); ?>" class="w-full h-36 object-cover" alt="<?= htmlspecialchars($menu['nama_makanan']); ?>">
-                        </div>
-                        <div class="p-4 flex flex-col flex-grow justify-between">
-                            <div>
-                                <h3 class="font-semibold text-blue-900 text-base line-clamp-1"><?= htmlspecialchars($menu['nama_makanan']); ?></h3>
-                                <p class="text-sm text-gray-500 mt-1 line-clamp-2"><?= htmlspecialchars($menu['deskripsi']); ?></p>
-                            </div>
-                            <p class="text-blue-700 font-bold text-sm mt-3">Rp <?= number_format($menu['harga'], 0, ',', '.'); ?></p>
-                        </div>
+                
+                <div @click="open = true" class="bg-white rounded-2xl shadow hover:shadow-lg transition-all duration-200 cursor-pointer overflow-hidden flex flex-col relative">
+                    <!-- Gambar -->
+                    <div class="relative">
+                        <img src="gambar/<?= htmlspecialchars($menu['gambar']); ?>" 
+                            class="w-full aspect-[3/2] object-cover" 
+                            alt="<?= htmlspecialchars($menu['nama_makanan']); ?>">
                     </div>
+
+                    <!-- Konten -->
+                    <div class="p-3 flex flex-col justify-between flex-grow">
+                        <!-- Nama & Deskripsi -->
+                        <div class="mb-2">
+                            <h3 class="font-semibold text-blue-900 text-base line-clamp-1">
+                                <?= htmlspecialchars($menu['nama_makanan']); ?>
+                            </h3>
+                            <p class="text-sm text-gray-500 mt-1 line-clamp-2">
+                                <?= htmlspecialchars($menu['deskripsi']); ?>
+                            </p>
+                        </div>
+
+                        <!-- Harga -->
+                        <p class="text-blue-700 font-bold text-sm mt-auto">
+                            Rp <?= number_format($menu['harga'], 0, ',', '.'); ?>
+                        </p>
+                    </div>
+                </div>
+
 
                     <!-- Modal dengan animasi -->
                     <div x-show="open"
@@ -265,35 +289,9 @@ if ($row = mysqli_fetch_assoc($result)) {
     <div class="text-center text-gray-500 py-10">Menu tidak ditemukan.</div>
 <?php endif; ?>
 
-<!-- Bottom Nav -->
-<nav class="fixed bottom-0 inset-x-0 bg-white border-t shadow-md z-50">
-    <div class="flex justify-between items-center text-sm text-gray-500">
-        <a href="index.php" class="flex flex-col items-center justify-center w-full py-2 <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'text-blue-600 font-semibold' : '' ?>">
-            <i class="fas fa-home text-lg mb-1"></i>
-            <span class="text-xs">Beranda</span>
-        </a>
-        <a href="ulasan.php" class="flex flex-col items-center justify-center w-full py-2 <?= basename($_SERVER['PHP_SELF']) == 'ulasan.php' ? 'text-yellow-500 font-semibold' : '' ?>">
-            <i class="fas fa-star text-yellow-500 text-lg mb-1"></i>
-            <span class="text-xs">Ulasan</span>
-        </a>
-        <a href="keranjang.php" class="relative -mt-6">
-            <div class="w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg border-4 border-white">
-                <i class="fas fa-shopping-cart text-2xl"></i>
-            </div>
-            <?php if ($keranjang_total > 0): ?>
-                <span class="absolute -top-1 -right-1 bg-red-600 text-white text-xs px-1.5 rounded-full"><?= $keranjang_total ?></span>
-            <?php endif; ?>
-        </a>
-        <a href="lokasi.php" class="flex flex-col items-center justify-center w-full py-2 text-red-600 <?= basename($_SERVER['PHP_SELF']) == 'lokasi.php' ? 'text-blue-600 font-semibold' : '' ?>">
-            <i class="fas fa-map-marker-alt text-lg mb-1"></i>
-            <span class="text-xs">Lokasi</span>
-        </a>
-        <a href="https://wa.me/6281234567890" target="_blank" class="flex flex-col items-center justify-center w-full py-2 text-green-600">
-            <i class="fab fa-whatsapp text-lg mb-1"></i>
-            <span class="text-xs">Chat Owner</span>
-        </a>
-    </div>
-</nav>
+
+<?php include 'layout/nav-bottom.php'; ?>
+
 
 </body>
 </html>
