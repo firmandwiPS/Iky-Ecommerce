@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 30, 2025 at 08:47 AM
+-- Generation Time: Jul 01, 2025 at 08:18 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -61,7 +61,8 @@ CREATE TABLE `keranjang` (
 --
 
 INSERT INTO `keranjang` (`id`, `session_id`, `menu_id`, `jumlah`) VALUES
-(23, 'gghjk574gkug3k0lhv1ieha9on', 8, 1);
+(23, 'gghjk574gkug3k0lhv1ieha9on', 8, 1),
+(24, '9f5rp0eb5ul83j2mcea4oc9ecu', 10, 1);
 
 -- --------------------------------------------------------
 
@@ -115,6 +116,32 @@ INSERT INTO `pesanan` (`id`, `nama_pelanggan`, `no_wa`, `detail`, `total`, `stat
 (6, 'firman', '08626277463', 'baso x 1 = Rp 15.000\n', 15000, 'Sedang diproses', '2025-06-30 01:27:50'),
 (7, 'firman', '08626277463', 'baso x 2 = Rp 30.000\n', 30000, 'Sedang diproses', '2025-06-30 01:30:21');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ulasan`
+--
+
+CREATE TABLE `ulasan` (
+  `id` int NOT NULL,
+  `makanan_id` int NOT NULL,
+  `nama_pengulas` varchar(100) NOT NULL,
+  `ulasan` text NOT NULL,
+  `kritik` text,
+  `saran` text,
+  `rating` tinyint NOT NULL,
+  `tanggal` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ;
+
+--
+-- Dumping data for table `ulasan`
+--
+
+INSERT INTO `ulasan` (`id`, `makanan_id`, `nama_pengulas`, `ulasan`, `kritik`, `saran`, `rating`, `tanggal`) VALUES
+(1, 8, 'firamn', 'bagus', '', '', 5, '2025-07-01 08:08:41'),
+(2, 10, 'amad', 'gkenak', 'belajar lg8i deh gk enak', 'mkn tai ajh', 1, '2025-07-01 08:19:49'),
+(3, 11, 'cahya', 'well', '', 'enakk', 4, '2025-07-01 08:24:19');
+
 --
 -- Indexes for dumped tables
 --
@@ -144,6 +171,13 @@ ALTER TABLE `pesanan`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `ulasan`
+--
+ALTER TABLE `ulasan`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_makanan_id` (`makanan_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -157,7 +191,7 @@ ALTER TABLE `akun`
 -- AUTO_INCREMENT for table `keranjang`
 --
 ALTER TABLE `keranjang`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `makanan`
@@ -170,6 +204,22 @@ ALTER TABLE `makanan`
 --
 ALTER TABLE `pesanan`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `ulasan`
+--
+ALTER TABLE `ulasan`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `ulasan`
+--
+ALTER TABLE `ulasan`
+  ADD CONSTRAINT `fk_ulasan_makanan` FOREIGN KEY (`makanan_id`) REFERENCES `makanan` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
