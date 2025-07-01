@@ -78,7 +78,7 @@ if ($row = mysqli_fetch_assoc($result)) {
             <h2 class="text-lg font-semibold text-blue-800">Jam Operasional</h2>
         </div>
         <p class="text-sm text-gray-700 pl-7">
-            Setiap Hari (Senin – Minggu): 09.00 – 21.00 WIB
+            Setiap Hari (Senin – Minggu): 09.00 – 20.00 WIB
         </p>
     </div>
 

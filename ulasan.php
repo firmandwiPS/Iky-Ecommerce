@@ -1,7 +1,9 @@
 <?php
 include 'config/app.php';
-$session_id = session_id();
 
+
+$title = 'Ulasan MAkanan';
+$session_id = session_id();
 // Ambil ulasan dan makanan
 $query_ulasan = mysqli_query($db, "
     SELECT u.*, m.nama_makanan 
@@ -43,7 +45,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ulasan Makanan</title>
+    <title><?= $title ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

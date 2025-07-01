@@ -24,7 +24,7 @@
             <i class="fas fa-map-marker-alt text-lg mb-1"></i>
             <span class="text-xs">Lokasi</span>
         </a>
-        <a href="https://wa.me/6281234567890" target="_blank" class="flex flex-col items-center justify-center w-full py-2 text-green-600">
+        <a href="https://wa.me/6281217415421" target="_blank" class="flex flex-col items-center justify-center w-full py-2 text-green-600">
             <i class="fab fa-whatsapp text-lg mb-1"></i>
             <span class="text-xs">Chat Owner</span>
         </a>

@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         *Nomor WhatsApp Pelanggan :* $wa
 
         *Pesanan:*
-            $detail_pesanan
+        $detail_pesanan
 
         *Total Bayar:* Rp " . number_format($total, 0, ',', '.') . "
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Terima kasih banyak!
         ");
 
-    header("Location: https://wa.me/62895703109379?text=$pesan_wa");
+    header("Location: https://wa.me/6281217415421?text=$pesan_wa");
     exit;
 } else {
     header("Location: keranjang.php");
