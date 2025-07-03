@@ -110,7 +110,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 <?php if (mysqli_num_rows($recommendedMenus) > 0): ?>
     <div class="px-4 pb-2">
         <h3 class="text-lg font-semibold text-blue-900 mb-2">⭐ Menu Recommended</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-8 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-6 gap-4">
             <?php while ($menu = mysqli_fetch_assoc($recommendedMenus)): ?>
                 <div x-data="{
                     open: false,
@@ -198,7 +198,7 @@ if ($row = mysqli_fetch_assoc($result)) {
 <?php if (mysqli_num_rows($allMenus) > 0): ?>
     <div class="px-4 pb-20 mt-6">
         <h3 class="text-lg font-semibold text-blue-900 mb-2">📋 Semua Menu</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-8 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-6 gap-4">
             <?php while ($menu = mysqli_fetch_assoc($allMenus)): ?>
                 <div x-data="{
                     open: false,

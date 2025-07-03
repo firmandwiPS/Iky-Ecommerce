@@ -17,12 +17,12 @@ if (!isset($_SESSION["login"])) {
 if (delete_akun($id_akun) > 0) {
         echo"<script>
                         alert('Data Akun Berhasil Di Hapus');
-                        document.location.href='crud-modal.php';
+                        document.location.href='akun.php';
                     </script>";
             }else {
                 echo"<script>
                         alert('Data Akun Gagal Di Hapus');
-                        document.location.href='crud-modal.php';
+                        document.location.href='akun.php';
                     </script>";
 }
 ?>

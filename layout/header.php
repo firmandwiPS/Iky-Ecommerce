@@ -43,6 +43,9 @@ include 'config/app.php';
 
   <!-- jQuery -->
   <script src="assets-template/plugins/jquery/jquery.min.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -55,7 +58,7 @@ include 'config/app.php';
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index.php" class="nav-link">Home</a>
+        <a href="dasboard.php" class="nav-link">Home</a>
       </li>
     </ul>
   </nav>
@@ -73,46 +76,96 @@ include 'config/app.php';
     <!-- Sidebar -->
     <div class="sidebar">
 
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+<!-- Sidebar Menu -->
+<nav class="mt-2">
+  <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-          <li class="nav-header text-white">DAFTAR MENU</li>
+    <li class="nav-header text-white">DAFTAR MENU</li>
 
-          <!-- Dashboard -->
-          <li class="nav-item">
-            <a href="dasboard.php" class="nav-link text-white">
-              <i class="nav-icon fas fa-tachometer-alt text-white"></i>
-              <p>Dashboard</p>
-            </a>
-          </li>
+    <!-- Dashboard -->
+    <li class="nav-item">
+      <a href="dasboard.php" class="nav-link text-white">
+        <i class="nav-icon fas fa-tachometer-alt text-white"></i>
+        <p>Dashboard</p>
+      </a>
+    </li>
 
-          <!-- Data Makanan -->
-          <li class="nav-item">
-            <a href="makanan.php" class="nav-link text-white">
-              <i class="nav-icon fas fa-utensils text-white"></i>
-              <p>Data Makanan</p>
-            </a>
-          </li>
+    <!-- Data Makanan -->
+    <li class="nav-item">
+      <a href="makanan.php" class="nav-link text-white">
+        <i class="nav-icon fas fa-utensils text-white"></i>
+        <p>Data Makanan</p>
+      </a>
+    </li>
 
-          <!-- Data Akun -->
-          <li class="nav-item">
-            <a href="akun.php" class="nav-link text-white">
-              <i class="nav-icon fas fa-users text-white"></i>
-              <p>Data Akun</p>
-            </a>
-          </li>
 
-          <!-- Logout -->
-          <li class="nav-item">
-            <a href="logout.php" class="nav-link text-white" onclick="return confirm('Yakin Anda Ingin Keluar?');">
-              <i class="nav-icon fas fa-sign-out-alt text-white"></i>
-              <p>Logout</p>
-            </a>
-          </li>
 
-        </ul>
-      </nav>
+    <!-- Pesanan -->
+    <li class="nav-item">
+      <a href="data-pesanan.php" class="nav-link text-white">
+        <i class="nav-icon fas fa-shopping-cart text-white"></i>
+        <p>Data Pesanan</p>
+      </a>
+    </li>
+
+    <!-- Ulasan -->
+    <li class="nav-item">
+      <a href="data-ulasan.php" class="nav-link text-white">
+        <i class="nav-icon fas fa-star text-white"></i>
+        <p>Data Ulasan</p>
+      </a>
+    </li>
+
+    <!-- Pengeluaran -->
+    <li class="nav-item has-treeview">
+      <a href="#" class="nav-link text-white">
+        <i class="nav-icon fas fa-money-bill-wave text-white"></i>
+        <p>
+          Data Pengeluaran
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+
+        <!-- Uang Masuk -->
+        <li class="nav-item">
+          <a href="uang-masuk.php" class="nav-link text-white">
+            <i class="far fa-circle nav-icon text-white"></i>
+            <p>Data Uang Masuk</p>
+          </a>
+        </li>
+
+        <!-- Uang Keluar -->
+        <li class="nav-item">
+          <a href="uang-keluar.php" class="nav-link text-white">
+            <i class="far fa-circle nav-icon text-white"></i>
+            <p>Data Uang Keluar</p>
+          </a>
+        </li>
+
+      </ul>
+    </li>
+
+
+    <!-- Data Akun -->
+    <li class="nav-item">
+      <a href="akun.php" class="nav-link text-white">
+        <i class="nav-icon fas fa-users text-white"></i>
+        <p>Data Akun</p>
+      </a>
+    </li>
+
+    <!-- Logout -->
+    <li class="nav-item">
+      <a href="logout.php" class="nav-link text-white" onclick="return confirm('Yakin Anda Ingin Keluar?');">
+        <i class="nav-icon fas fa-sign-out-alt text-white"></i>
+        <p>Logout</p>
+      </a>
+    </li>
+
+  </ul>
+</nav>
+
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
