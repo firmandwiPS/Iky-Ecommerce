@@ -2,34 +2,51 @@
 session_start();
 if (!isset($_SESSION["login"])) {
     echo "<script>
-            alert('Login Dulu!!');
-            document.location.href='login.php';
-          </script>";
+        Swal.fire({
+            icon: 'warning',
+            title: 'Oops!',
+            text: 'Login dulu ya!',
+            showConfirmButton: true
+        }).then(() => {
+            window.location.href = 'login.php';
+        });
+    </script>";
     exit;
 }
 
 $title = 'Daftar Akun';
 include 'layout/header.php';
 
-
-
 $data_akun = select("SELECT * FROM akun");
-
-$id_akun = intval($_SESSION['id_akun']); // Hindari SQL injection
+$id_akun = intval($_SESSION['id_akun']);
 $data_bylogin = select("SELECT * FROM akun WHERE id_akun = $id_akun");
 
 // Tambah akun
 if (isset($_POST['tambah'])) {
     if (create_akun($_POST) > 0) {
         echo "<script>
-                alert('Data Akun Berhasil Ditambahkan');
-                document.location.href = 'akun.php';
-              </script>";
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data Akun Berhasil Ditambahkan',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.href = 'akun.php';
+            });
+        </script>";
     } else {
         echo "<script>
-                alert('Data Akun Gagal Ditambahkan');
-                document.location.href = 'akun.php';
-              </script>";
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Data Akun Gagal Ditambahkan',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.href = 'akun.php';
+            });
+        </script>";
     }
 }
 
@@ -37,19 +54,32 @@ if (isset($_POST['tambah'])) {
 if (isset($_POST['ubah'])) {
     if (update_akun($_POST) > 0) {
         echo "<script>
-                alert('Data Akun Berhasil Diubah');
-                document.location.href = 'akun.php';
-              </script>";
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data Akun Berhasil Diubah',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.href = 'akun.php';
+            });
+        </script>";
     } else {
         echo "<script>
-                alert('Data Akun Gagal Diubah');
-                document.location.href = 'akun.php';
-              </script>";
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Data Akun Gagal Diubah',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.href = 'akun.php';
+            });
+        </script>";
     }
 }
 ?>
 
-<!-- Konten Utama -->
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -60,25 +90,34 @@ if (isset($_POST['ubah'])) {
     <section class="content">
         <div class="container-fluid">
             <?php if ($_SESSION['level'] == 1) : ?>
-                <a href="#" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambah">
-                    <i class="fas fa-plus text-white"></i> Tambah
-                </a>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                        <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Tambah Akun</span>
+                    </button>
+                    
+                    <div class="d-block d-md-none">
+                        <button class="btn btn-info" id="filterBtn">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
             <?php endif; ?>
 
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h3 class="card-title">Daftar Akun</h3>
                 </div>
-                <div class="card-body table-responsive">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead class="text-center bg-primary text-white">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-bordered table-hover mb-0">
+                        <thead class="bg-primary text-white">
                             <tr>
-                                <th>No</th>
+                                <th class="text-center">No</th>
                                 <th>Nama</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Password</th>
-                                <th>Aksi</th>
+                                <th class="d-none d-md-table-cell">Username</th>
+                                <th class="d-none d-lg-table-cell">Email</th>
+                                <th class="text-center">Password</th>
+                                <th class="d-none d-sm-table-cell">Level</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,20 +126,29 @@ if (isset($_POST['ubah'])) {
                             $akuns = ($_SESSION['level'] == 1) ? $data_akun : $data_bylogin;
                             foreach ($akuns as $akun): ?>
                                 <tr>
-                                    <td><?= $no++; ?></td>
+                                    <td class="text-center"><?= $no++; ?></td>
                                     <td><?= htmlspecialchars($akun['nama']); ?></td>
-                                    <td><?= htmlspecialchars($akun['username']); ?></td>
-                                    <td><?= htmlspecialchars($akun['email']); ?></td>
-                                    <td>Password Ter-enkripsi</td>
+                                    <td class="d-none d-md-table-cell"><?= htmlspecialchars($akun['username']); ?></td>
+                                    <td class="d-none d-lg-table-cell"><?= htmlspecialchars($akun['email']); ?></td>
                                     <td class="text-center">
-                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $akun['id_akun']; ?>">
-                                            <i class="fas fa-edit text-white"></i>
-                                        </button>
-                                        <?php if ($_SESSION['level'] == 1): ?>
-                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalHapus<?= $akun['id_akun']; ?>">
-                                                <i class="fas fa-trash-alt text-white"></i>
+                                        <span class="badge bg-secondary">Ter-enkripsi</span>
+                                    </td>
+                                    <td class="d-none d-sm-table-cell text-center">
+                                        <span class="badge <?= $akun['level'] == 1 ? 'bg-success' : 'bg-info' ?>">
+                                            <?= $akun['level'] == 1 ? 'Admin' : 'Owner' ?>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <button class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $akun['id_akun']; ?>">
+                                                <i class="fas fa-edit"></i>
                                             </button>
-                                        <?php endif; ?>
+                                            <?php if ($_SESSION['level'] == 1): ?>
+                                                <button onclick="konfirmasiHapus(<?= $akun['id_akun']; ?>)" class="btn btn-sm btn-danger text-white">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -113,22 +161,34 @@ if (isset($_POST['ubah'])) {
 </div>
 
 <!-- Modal Tambah -->
-<div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="labelTambah" aria-hidden="true">
+<div class="modal fade" id="modalTambah" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="post">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="labelTambah">Tambah Akun</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title">Tambah Akun</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3"><label>Nama</label><input type="text" name="nama" class="form-control" required></div>
-                    <div class="mb-3"><label>Username</label><input type="text" name="username" class="form-control" required></div>
-                    <div class="mb-3"><label>Email</label><input type="email" name="email" class="form-control" required></div>
-                    <div class="mb-3"><label>Password</label><input type="password" name="password" class="form-control" required minlength="6"></div>
                     <div class="mb-3">
-                        <label>Level</label>
-                        <select name="level" class="form-control" required>
+                        <label class="form-label">Nama</label>
+                        <input type="text" name="nama" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" required minlength="6">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Level</label>
+                        <select name="level" class="form-select" required>
                             <option value="">-- Pilih Level --</option>
                             <option value="1">Admin</option>
                             <option value="2">Owner</option>
@@ -144,28 +204,39 @@ if (isset($_POST['ubah'])) {
     </div>
 </div>
 
-<!-- Modal Ubah & Hapus -->
+<!-- Modal Ubah -->
 <?php foreach ($data_akun as $akun): ?>
-    <!-- Modal Ubah -->
-    <div class="modal fade" id="modalUbah<?= $akun['id_akun']; ?>" tabindex="-1">
+    <div class="modal fade" id="modalUbah<?= $akun['id_akun']; ?>" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="post">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title">Ubah Akun</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id_akun" value="<?= $akun['id_akun']; ?>">
-                        <div class="mb-3"><label>Nama</label><input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($akun['nama']); ?>" required></div>
-                        <div class="mb-3"><label>Username</label><input type="text" name="username" class="form-control" value="<?= htmlspecialchars($akun['username']); ?>" required></div>
-                        <div class="mb-3"><label>Email</label><input type="email" name="email" class="form-control" value="<?= htmlspecialchars($akun['email']); ?>" required></div>
-                        <div class="mb-3"><label>Password <small>(Baru/Lama)</small></label><input type="password" name="password" class="form-control" required minlength="6"></div>
+                        <div class="mb-3">
+                            <label class="form-label">Nama</label>
+                            <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($akun['nama']); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" name="username" class="form-control" value="<?= htmlspecialchars($akun['username']); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($akun['email']); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password <small>(Baru/Lama)</small></label>
+                            <input type="password" name="password" class="form-control" required minlength="6">
+                        </div>
 
                         <?php if ($_SESSION['level'] == 1): ?>
                             <div class="mb-3">
-                                <label>Level</label>
-                                <select name="level" class="form-control" required>
+                                <label class="form-label">Level</label>
+                                <select name="level" class="form-select" required>
                                     <option value="1" <?= $akun['level'] == 1 ? 'selected' : '' ?>>Admin</option>
                                     <option value="2" <?= $akun['level'] == 2 ? 'selected' : '' ?>>Owner</option>
                                 </select>
@@ -182,25 +253,51 @@ if (isset($_POST['ubah'])) {
             </div>
         </div>
     </div>
-
-    <!-- Modal Hapus -->
-    <div class="modal fade" id="modalHapus<?= $akun['id_akun']; ?>" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">Hapus Akun</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Yakin ingin menghapus akun <strong><?= htmlspecialchars($akun['nama']); ?></strong>?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <a href="hapus-akun.php?id_akun=<?= $akun['id_akun']; ?>" class="btn btn-danger">Hapus</a>
-                </div>
-            </div>
-        </div>
-    </div>
 <?php endforeach; ?>
+
+<style>
+    /* Responsive table */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Badge styling */
+    .badge {
+        font-size: 0.85rem;
+        padding: 0.35em 0.65em;
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 767.98px) {
+        .table th, .table td {
+            padding: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
+<script>
+function konfirmasiHapus(id) {
+    Swal.fire({
+        title: 'Yakin?',
+        text: "Data akun akan dihapus permanen!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, hapus!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'hapus-akun.php?id_akun=' + id;
+        }
+    });
+}
+</script>
 
 <?php include 'layout/footer.php'; ?>

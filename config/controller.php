@@ -13,6 +13,12 @@ function select($query)
 return $result;
 }
 
+function execute($query)
+{
+    global $db;
+    mysqli_query($db, $query);
+    return mysqli_affected_rows($db);
+}
 
 
 function create_akun($post)
