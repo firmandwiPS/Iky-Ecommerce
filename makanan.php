@@ -99,7 +99,7 @@ if (isset($_POST['ubah'])) {
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
                     <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Tambah Makanan</span>
                 </button>
-                
+
 
             </div>
 
@@ -123,7 +123,8 @@ if (isset($_POST['ubah'])) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $no = 1; foreach ($data_makanan as $makanan): ?>
+                            <?php $no = 1;
+                            foreach ($data_makanan as $makanan): ?>
                                 <tr>
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td><?= htmlspecialchars($makanan['nama_makanan']); ?></td>
@@ -183,7 +184,7 @@ if (isset($_POST['ubah'])) {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">Kategori</label>
@@ -198,12 +199,12 @@ if (isset($_POST['ubah'])) {
                                                             <input type="number" name="stok" class="form-control" value="<?= $makanan['stok']; ?>" required>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="mb-3">
                                                         <label class="form-label">Deskripsi</label>
                                                         <textarea name="deskripsi" class="form-control" rows="3" required><?= htmlspecialchars($makanan['deskripsi']); ?></textarea>
                                                     </div>
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">Gambar (kosongkan jika tidak diubah)</label>
@@ -261,7 +262,7 @@ if (isset($_POST['ubah'])) {
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Kategori</label>
@@ -277,12 +278,12 @@ if (isset($_POST['ubah'])) {
                             <input type="number" name="stok" class="form-control" required>
                         </div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="deskripsi" class="form-control" rows="3" required></textarea>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Gambar</label>
@@ -313,7 +314,7 @@ if (isset($_POST['ubah'])) {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     /* Deskripsi makanan */
     .deskripsi-makanan {
         max-width: 300px;
@@ -321,27 +322,29 @@ if (isset($_POST['ubah'])) {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    
+
     /* Badge status */
     .badge {
         font-size: 0.85rem;
         padding: 0.35em 0.65em;
     }
-    
+
     /* Gambar thumbnail */
     .img-thumbnail {
         max-width: 60px;
         height: auto;
         object-fit: cover;
     }
-    
+
     /* Mobile optimizations */
     @media (max-width: 767.98px) {
-        .table th, .table td {
+
+        .table th,
+        .table td {
             padding: 0.5rem;
             font-size: 0.85rem;
         }
-        
+
         .btn-sm {
             padding: 0.25rem 0.5rem;
             font-size: 0.75rem;
@@ -350,36 +353,36 @@ if (isset($_POST['ubah'])) {
 </style>
 
 <script>
-function konfirmasiHapus(id) {
-    Swal.fire({
-        title: 'Yakin?',
-        text: "Data akan dihapus permanen!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, hapus!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = 'hapus-makanan.php?id=' + id;
-        }
-    });
-}
+    function konfirmasiHapus(id) {
+        Swal.fire({
+            title: 'Yakin?',
+            text: "Data akan dihapus permanen!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'hapus-makanan.php?id=' + id;
+            }
+        });
+    }
 
-// Format input harga
-document.querySelectorAll('input[name="harga"]').forEach(input => {
-    input.addEventListener('input', function(e) {
-        // Hapus semua karakter non-digit
-        let value = this.value.replace(/[^\d]/g, '');
-        
-        // Format sebagai Rupiah
-        if (value.length > 0) {
-            value = 'Rp' + parseInt(value).toLocaleString('id-ID');
-        }
-        
-        this.value = value;
+    // Format input harga
+    document.querySelectorAll('input[name="harga"]').forEach(input => {
+        input.addEventListener('input', function(e) {
+            // Hapus semua karakter non-digit
+            let value = this.value.replace(/[^\d]/g, '');
+
+            // Format sebagai Rupiah
+            if (value.length > 0) {
+                value = 'Rp' + parseInt(value).toLocaleString('id-ID');
+            }
+
+            this.value = value;
+        });
     });
-});
 </script>
 
 <?php include 'layout/footer.php'; ?>

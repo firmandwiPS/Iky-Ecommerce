@@ -94,7 +94,7 @@ if (isset($_POST['ubah'])) {
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
                         <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Tambah Akun</span>
                     </button>
-                    
+
 
                 </div>
             <?php endif; ?>
@@ -257,20 +257,22 @@ if (isset($_POST['ubah'])) {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     /* Badge styling */
     .badge {
         font-size: 0.85rem;
         padding: 0.35em 0.65em;
     }
-    
+
     /* Mobile optimizations */
     @media (max-width: 767.98px) {
-        .table th, .table td {
+
+        .table th,
+        .table td {
             padding: 0.5rem;
             font-size: 0.85rem;
         }
-        
+
         .btn-sm {
             padding: 0.25rem 0.5rem;
             font-size: 0.75rem;
@@ -279,21 +281,21 @@ if (isset($_POST['ubah'])) {
 </style>
 
 <script>
-function konfirmasiHapus(id) {
-    Swal.fire({
-        title: 'Yakin?',
-        text: "Data akun akan dihapus permanen!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, hapus!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = 'hapus-akun.php?id_akun=' + id;
-        }
-    });
-}
+    function konfirmasiHapus(id) {
+        Swal.fire({
+            title: 'Yakin?',
+            text: "Data akun akan dihapus permanen!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'hapus-akun.php?id_akun=' + id;
+            }
+        });
+    }
 </script>
 
 <?php include 'layout/footer.php'; ?>

@@ -135,7 +135,8 @@ if (isset($_POST['hapus'])) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $no = 1; foreach ($data_ulasan as $ulasan): ?>
+                            <?php $no = 1;
+                            foreach ($data_ulasan as $ulasan): ?>
                                 <tr>
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td><?= htmlspecialchars($ulasan['nama_makanan']); ?></td>
@@ -152,7 +153,7 @@ if (isset($_POST['hapus'])) {
                                         </div>
                                     </td>
                                     <td class="text-center">
-                                        <?php 
+                                        <?php
                                         // Display star rating
                                         for ($i = 1; $i <= 5; $i++) {
                                             if ($i <= $ulasan['rating']) {
@@ -327,18 +328,20 @@ if (isset($_POST['hapus'])) {
         max-width: 300px;
         word-wrap: break-word;
     }
-    
+
     .table-responsive {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     @media (max-width: 767.98px) {
-        .table th, .table td {
+
+        .table th,
+        .table td {
             padding: 0.5rem;
             font-size: 0.85rem;
         }
-        
+
         .btn-sm {
             padding: 0.25rem 0.5rem;
             font-size: 0.75rem;

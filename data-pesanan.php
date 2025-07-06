@@ -178,7 +178,8 @@ if (isset($_POST['hapus'])) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $no = 1; foreach ($data_pesanan as $p): ?>
+                            <?php $no = 1;
+                            foreach ($data_pesanan as $p): ?>
                                 <tr>
                                     <td class="text-center"><?= $no++; ?></td>
                                     <td>
@@ -197,7 +198,7 @@ if (isset($_POST['hapus'])) {
                                         Rp<?= number_format($p['total'], 0, ',', '.'); ?>
                                     </td>
                                     <td class="text-center">
-                                        <?php 
+                                        <?php
                                         $status_class = '';
                                         if ($p['status'] == 'Selesai') $status_class = 'bg-success';
                                         elseif ($p['status'] == 'Dibatalkan') $status_class = 'bg-danger';
@@ -247,9 +248,9 @@ if (isset($_POST['hapus'])) {
                                                     <div class="mb-3">
                                                         <label class="form-label">Detail Pesanan</label>
                                                         <div id="menu-items-container-<?= $p['id'] ?>">
-                                                            <?php 
+                                                            <?php
                                                             $detail_items = isset($p['detail']) ? explode(", ", $p['detail']) : [];
-                                                            foreach ($detail_items as $item): 
+                                                            foreach ($detail_items as $item):
                                                                 if (preg_match('/(.+?)\sx(\d+)/', $item, $match)) {
                                                                     $nama = trim($match[1]);
                                                                     $jumlah = (int)$match[2];
@@ -258,27 +259,27 @@ if (isset($_POST['hapus'])) {
                                                                     $jumlah = 1;
                                                                 }
                                                             ?>
-                                                            <div class="row mb-2 menu-row">
-                                                                <div class="col-md-6 mb-2 mb-md-0">
-                                                                    <select name="menu[]" class="form-select" required>
-                                                                        <option value="">-- Pilih Makanan --</option>
-                                                                        <?php foreach ($data_makanan as $makanan): ?>
-                                                                            <option value="<?= htmlspecialchars($makanan['nama_makanan']) ?>"
-                                                                                <?= $makanan['nama_makanan'] === $nama ? 'selected' : '' ?>>
-                                                                                <?= $makanan['nama_makanan'] ?> - Rp<?= number_format($makanan['harga'], 0, ',', '.') ?>
-                                                                            </option>
-                                                                        <?php endforeach; ?>
-                                                                    </select>
+                                                                <div class="row mb-2 menu-row">
+                                                                    <div class="col-md-6 mb-2 mb-md-0">
+                                                                        <select name="menu[]" class="form-select" required>
+                                                                            <option value="">-- Pilih Makanan --</option>
+                                                                            <?php foreach ($data_makanan as $makanan): ?>
+                                                                                <option value="<?= htmlspecialchars($makanan['nama_makanan']) ?>"
+                                                                                    <?= $makanan['nama_makanan'] === $nama ? 'selected' : '' ?>>
+                                                                                    <?= $makanan['nama_makanan'] ?> - Rp<?= number_format($makanan['harga'], 0, ',', '.') ?>
+                                                                                </option>
+                                                                            <?php endforeach; ?>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-md-3 mb-2 mb-md-0">
+                                                                        <input type="number" name="jumlah[]" value="<?= $jumlah ?>" min="1" class="form-control" required>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <button type="button" class="btn btn-danger w-100 btn-remove-menu">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="col-md-3 mb-2 mb-md-0">
-                                                                    <input type="number" name="jumlah[]" value="<?= $jumlah ?>" min="1" class="form-control" required>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <button type="button" class="btn btn-danger w-100 btn-remove-menu">
-                                                                        <i class="fas fa-trash"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
                                                             <?php endforeach; ?>
                                                         </div>
                                                         <button type="button" class="btn btn-sm btn-primary mt-2 btnTambahMenu" data-id="<?= $p['id'] ?>">
@@ -420,7 +421,7 @@ if (isset($_POST['hapus'])) {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     /* Pesanan detail style */
     .pesanan-detail {
         max-width: 250px;
@@ -428,20 +429,22 @@ if (isset($_POST['hapus'])) {
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    
+
     /* Badge status */
     .badge {
         font-size: 0.85rem;
         padding: 0.35em 0.65em;
     }
-    
+
     /* Mobile optimizations */
     @media (max-width: 767.98px) {
-        .table th, .table td {
+
+        .table th,
+        .table td {
             padding: 0.5rem;
             font-size: 0.85rem;
         }
-        
+
         .btn-sm {
             padding: 0.25rem 0.5rem;
             font-size: 0.75rem;
@@ -450,34 +453,34 @@ if (isset($_POST['hapus'])) {
 </style>
 
 <script>
-// Data makanan untuk perhitungan
-const dataMakanan = <?= json_encode($data_makanan); ?>;
+    // Data makanan untuk perhitungan
+    const dataMakanan = <?= json_encode($data_makanan); ?>;
 
-// ==================== FUNGSI UNTUK MODAL TAMBAH ====================
+    // ==================== FUNGSI UNTUK MODAL TAMBAH ====================
 
-// Fungsi untuk menghitung total di modal tambah
-function calculateTotal() {
-    let total = 0;
-    
-    // Hitung total dari semua item
-    $('.detail-item').each(function() {
-        const menu = $(this).find('select[name="menu[]"]').val();
-        const jumlah = parseInt($(this).find('input[name="jumlah[]"]').val()) || 0;
-        
-        // Cari harga dari dataMakanan
-        const item = dataMakanan.find(m => m.nama_makanan === menu);
-        if (item) {
-            total += item.harga * jumlah;
-        }
-    });
-    
-    // Format total ke Rupiah
-    $('#total-harga').val('Rp' + total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ',-');
-}
+    // Fungsi untuk menghitung total di modal tambah
+    function calculateTotal() {
+        let total = 0;
 
-// Tambah item makanan di modal tambah
-$('#add-item').click(function() {
-    const newItem = `
+        // Hitung total dari semua item
+        $('.detail-item').each(function() {
+            const menu = $(this).find('select[name="menu[]"]').val();
+            const jumlah = parseInt($(this).find('input[name="jumlah[]"]').val()) || 0;
+
+            // Cari harga dari dataMakanan
+            const item = dataMakanan.find(m => m.nama_makanan === menu);
+            if (item) {
+                total += item.harga * jumlah;
+            }
+        });
+
+        // Format total ke Rupiah
+        $('#total-harga').val('Rp' + total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ',-');
+    }
+
+    // Tambah item makanan di modal tambah
+    $('#add-item').click(function() {
+        const newItem = `
     <div class="row mb-2 detail-item">
         <div class="col-md-6 mb-2 mb-md-0">
             <select name="menu[]" class="form-select" required>
@@ -498,164 +501,164 @@ $('#add-item').click(function() {
             </button>
         </div>
     </div>`;
-    
-    $('#detail-container').append(newItem);
-    calculateTotal();
-});
 
-// Hapus item makanan di modal tambah
-$(document).on('click', '.remove-item', function() {
-    $(this).closest('.detail-item').remove();
-    calculateTotal();
-});
-
-// Hitung ulang saat ada perubahan di modal tambah
-$(document).on('change', 'select[name="menu[]"], input[name="jumlah[]"]', function() {
-    calculateTotal();
-});
-
-// Hitung total awal di modal tambah
-calculateTotal();
-
-// ==================== FUNGSI UNTUK MODAL UBAH ====================
-
-// Fungsi untuk menambahkan baris makanan baru di modal ubah
-function tambahBarisMakanan(containerId) {
-    const container = document.getElementById(`menu-items-container-${containerId}`);
-    
-    const row = document.createElement('div');
-    row.className = 'row mb-2 menu-row';
-    
-    // Kolom Pilih Makanan
-    const colSelect = document.createElement('div');
-    colSelect.className = 'col-md-6 mb-2 mb-md-0';
-    
-    const select = document.createElement('select');
-    select.name = 'menu[]';
-    select.className = 'form-select';
-    select.required = true;
-    
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = '-- Pilih Makanan --';
-    select.appendChild(defaultOption);
-    
-    dataMakanan.forEach(makanan => {
-        const option = document.createElement('option');
-        option.value = makanan.nama_makanan;
-        option.textContent = `${makanan.nama_makanan} - Rp${makanan.harga.toLocaleString('id-ID')}`;
-        select.appendChild(option);
+        $('#detail-container').append(newItem);
+        calculateTotal();
     });
-    
-    colSelect.appendChild(select);
-    
-    // Kolom Jumlah
-    const colJumlah = document.createElement('div');
-    colJumlah.className = 'col-md-3 mb-2 mb-md-0';
-    
-    const jumlahInput = document.createElement('input');
-    jumlahInput.type = 'number';
-    jumlahInput.name = 'jumlah[]';
-    jumlahInput.className = 'form-control';
-    jumlahInput.min = 1;
-    jumlahInput.value = 1;
-    jumlahInput.required = true;
-    colJumlah.appendChild(jumlahInput);
-    
-    // Kolom Tombol Hapus
-    const colBtn = document.createElement('div');
-    colBtn.className = 'col-md-2';
-    
-    const btnRemove = document.createElement('button');
-    btnRemove.type = 'button';
-    btnRemove.className = 'btn btn-danger w-100 btn-remove-menu';
-    btnRemove.innerHTML = '<i class="fas fa-trash"></i>';
-    colBtn.appendChild(btnRemove);
-    
-    // Gabungkan semua kolom
-    row.appendChild(colSelect);
-    row.appendChild(colJumlah);
-    row.appendChild(colBtn);
-    
-    // Tambahkan ke container
-    container.appendChild(row);
-    
-    // Tambahkan event listeners
-    select.addEventListener('change', () => hitungTotal(containerId));
-    jumlahInput.addEventListener('input', () => hitungTotal(containerId));
-    
-    btnRemove.addEventListener('click', function() {
-        row.remove();
-        hitungTotal(containerId);
-    });
-}
 
-// Fungsi untuk menghitung total di modal ubah
-function hitungTotal(id) {
-    let total = 0;
-    const container = document.getElementById(`menu-items-container-${id}`);
-    const rows = container.querySelectorAll('.menu-row');
-    
-    rows.forEach(row => {
-        const select = row.querySelector('select[name="menu[]"]');
-        const input = row.querySelector('input[name="jumlah[]"]');
-        
-        if (select && input) {
-            const menu = select.value;
-            const jumlah = parseInt(input.value) || 0;
-            
-            const item = dataMakanan.find(m => m.nama_makanan === menu);
-            if (item) {
-                total += item.harga * jumlah;
+    // Hapus item makanan di modal tambah
+    $(document).on('click', '.remove-item', function() {
+        $(this).closest('.detail-item').remove();
+        calculateTotal();
+    });
+
+    // Hitung ulang saat ada perubahan di modal tambah
+    $(document).on('change', 'select[name="menu[]"], input[name="jumlah[]"]', function() {
+        calculateTotal();
+    });
+
+    // Hitung total awal di modal tambah
+    calculateTotal();
+
+    // ==================== FUNGSI UNTUK MODAL UBAH ====================
+
+    // Fungsi untuk menambahkan baris makanan baru di modal ubah
+    function tambahBarisMakanan(containerId) {
+        const container = document.getElementById(`menu-items-container-${containerId}`);
+
+        const row = document.createElement('div');
+        row.className = 'row mb-2 menu-row';
+
+        // Kolom Pilih Makanan
+        const colSelect = document.createElement('div');
+        colSelect.className = 'col-md-6 mb-2 mb-md-0';
+
+        const select = document.createElement('select');
+        select.name = 'menu[]';
+        select.className = 'form-select';
+        select.required = true;
+
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = '-- Pilih Makanan --';
+        select.appendChild(defaultOption);
+
+        dataMakanan.forEach(makanan => {
+            const option = document.createElement('option');
+            option.value = makanan.nama_makanan;
+            option.textContent = `${makanan.nama_makanan} - Rp${makanan.harga.toLocaleString('id-ID')}`;
+            select.appendChild(option);
+        });
+
+        colSelect.appendChild(select);
+
+        // Kolom Jumlah
+        const colJumlah = document.createElement('div');
+        colJumlah.className = 'col-md-3 mb-2 mb-md-0';
+
+        const jumlahInput = document.createElement('input');
+        jumlahInput.type = 'number';
+        jumlahInput.name = 'jumlah[]';
+        jumlahInput.className = 'form-control';
+        jumlahInput.min = 1;
+        jumlahInput.value = 1;
+        jumlahInput.required = true;
+        colJumlah.appendChild(jumlahInput);
+
+        // Kolom Tombol Hapus
+        const colBtn = document.createElement('div');
+        colBtn.className = 'col-md-2';
+
+        const btnRemove = document.createElement('button');
+        btnRemove.type = 'button';
+        btnRemove.className = 'btn btn-danger w-100 btn-remove-menu';
+        btnRemove.innerHTML = '<i class="fas fa-trash"></i>';
+        colBtn.appendChild(btnRemove);
+
+        // Gabungkan semua kolom
+        row.appendChild(colSelect);
+        row.appendChild(colJumlah);
+        row.appendChild(colBtn);
+
+        // Tambahkan ke container
+        container.appendChild(row);
+
+        // Tambahkan event listeners
+        select.addEventListener('change', () => hitungTotal(containerId));
+        jumlahInput.addEventListener('input', () => hitungTotal(containerId));
+
+        btnRemove.addEventListener('click', function() {
+            row.remove();
+            hitungTotal(containerId);
+        });
+    }
+
+    // Fungsi untuk menghitung total di modal ubah
+    function hitungTotal(id) {
+        let total = 0;
+        const container = document.getElementById(`menu-items-container-${id}`);
+        const rows = container.querySelectorAll('.menu-row');
+
+        rows.forEach(row => {
+            const select = row.querySelector('select[name="menu[]"]');
+            const input = row.querySelector('input[name="jumlah[]"]');
+
+            if (select && input) {
+                const menu = select.value;
+                const jumlah = parseInt(input.value) || 0;
+
+                const item = dataMakanan.find(m => m.nama_makanan === menu);
+                if (item) {
+                    total += item.harga * jumlah;
+                }
             }
+        });
+
+        const totalInput = document.getElementById(`total-${id}`);
+        totalInput.value = 'Rp' + total.toLocaleString('id-ID');
+    }
+
+    // Event listener untuk tombol tambah makanan di modal ubah
+    document.querySelectorAll('.btnTambahMenu').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            tambahBarisMakanan(id);
+        });
+    });
+
+    // Event delegation untuk tombol hapus yang sudah ada di modal ubah
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-remove-menu')) {
+            const row = e.target.closest('.menu-row');
+            const container = row.closest('[id^="menu-items-container-"]');
+            const id = container.id.replace('menu-items-container-', '');
+            row.remove();
+            hitungTotal(id);
         }
     });
-    
-    const totalInput = document.getElementById(`total-${id}`);
-    totalInput.value = 'Rp' + total.toLocaleString('id-ID');
-}
 
-// Event listener untuk tombol tambah makanan di modal ubah
-document.querySelectorAll('.btnTambahMenu').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        tambahBarisMakanan(id);
+    // Hitung total awal untuk setiap modal ubah
+    document.querySelectorAll('[id^="menu-items-container-"]').forEach(container => {
+        const id = container.id.replace('menu-items-container-', '');
+        hitungTotal(id);
     });
-});
 
-// Event delegation untuk tombol hapus yang sudah ada di modal ubah
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.btn-remove-menu')) {
-        const row = e.target.closest('.menu-row');
-        const container = row.closest('[id^="menu-items-container-"]');
-        const id = container.id.replace('menu-items-container-', '');
-        row.remove();
-        hitungTotal(id);
-    }
-});
+    // Event listener untuk select dan input yang sudah ada di modal ubah
+    document.addEventListener('change', function(e) {
+        if (e.target.matches('select[name="menu[]"]')) {
+            const container = e.target.closest('[id^="menu-items-container-"]');
+            const id = container.id.replace('menu-items-container-', '');
+            hitungTotal(id);
+        }
+    });
 
-// Hitung total awal untuk setiap modal ubah
-document.querySelectorAll('[id^="menu-items-container-"]').forEach(container => {
-    const id = container.id.replace('menu-items-container-', '');
-    hitungTotal(id);
-});
-
-// Event listener untuk select dan input yang sudah ada di modal ubah
-document.addEventListener('change', function(e) {
-    if (e.target.matches('select[name="menu[]"]')) {
-        const container = e.target.closest('[id^="menu-items-container-"]');
-        const id = container.id.replace('menu-items-container-', '');
-        hitungTotal(id);
-    }
-});
-
-document.addEventListener('input', function(e) {
-    if (e.target.matches('input[name="jumlah[]"]')) {
-        const container = e.target.closest('[id^="menu-items-container-"]');
-        const id = container.id.replace('menu-items-container-', '');
-        hitungTotal(id);
-    }
-});
+    document.addEventListener('input', function(e) {
+        if (e.target.matches('input[name="jumlah[]"]')) {
+            const container = e.target.closest('[id^="menu-items-container-"]');
+            const id = container.id.replace('menu-items-container-', '');
+            hitungTotal(id);
+        }
+    });
 </script>
 
 <?php include 'layout/footer.php'; ?>

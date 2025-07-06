@@ -10,7 +10,7 @@ function select($query)
     $rows[] = $row;
     }
     return $rows;
-return $result;
+   return $result;
 }
 
 function execute($query)
