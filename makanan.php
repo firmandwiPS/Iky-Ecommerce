@@ -100,11 +100,7 @@ if (isset($_POST['ubah'])) {
                     <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Tambah Makanan</span>
                 </button>
                 
-                <div class="d-block d-md-none">
-                    <button class="btn btn-info" id="filterBtn">
-                        <i class="fas fa-filter"></i>
-                    </button>
-                </div>
+
             </div>
 
             <div class="card">
