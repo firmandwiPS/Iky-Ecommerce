@@ -1,5 +1,7 @@
 <?php
 include 'config/app.php';
+
+$currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +42,10 @@ include 'config/app.php';
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.bootstrap5.css">
+
+
+<script src="https://cdn.tailwindcss.com"></script>
+
 
   <!-- jQuery -->
   <script src="assets-template/plugins/jquery/jquery.min.js"></script>
@@ -172,35 +178,54 @@ include 'config/app.php';
               </a>
             </li>
 
-            <!-- Pengeluaran -->
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link text-white">
-                <i class="nav-icon fas fa-money-bill-wave text-white"></i>
-                <p>
-                  Data Pengeluaran
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
+<li class="nav-item has-treeview menu-open">
+  <a href="#" class="nav-link active" style="background-color: rgba(255,255,255,0.1);">
+    <i class="nav-icon fas fa-money-bill-wave"></i>
+    <p>
+      Data Pengeluaran
+      <i class="right fas fa-angle-left"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview" style="padding-left: 15px;">
+    
+    <!-- Data Keuangan -->
+    <li class="nav-item">
+      <a href="data-keuangan.php" class="nav-link <?php echo ($currentPage == 'data-keuangan.php') ? 'active' : ''; ?>" style="<?php echo ($currentPage == 'data-keuangan.php') ? 'background-color: rgba(255,255,255,0.1);' : ''; ?>">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-wallet nav-icon mr-2" style="color: #17a2b8;"></i>
+          <div>
+            <p class="mb-0 text-white">Data Keuangan</p>
+          </div>
+        </div>
+      </a>
+    </li>
 
-                <!-- Uang Masuk -->
-                <li class="nav-item">
-                  <a href="uang-masuk.php" class="nav-link text-white">
-                    <i class="far fa-circle nav-icon text-white"></i>
-                    <p>Data Uang Masuk</p>
-                  </a>
-                </li>
+    <!-- Uang Masuk -->
+    <li class="nav-item mt-1">
+      <a href="uang-masuk.php" class="nav-link <?php echo ($currentPage == 'uang-masuk.php') ? 'active' : ''; ?>" style="<?php echo ($currentPage == 'uang-masuk.php') ? 'background-color: rgba(255,255,255,0.1);' : ''; ?>">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-arrow-circle-down nav-icon mr-2" style="color: #28a745;"></i>
+          <div>
+            <p class="mb-0 text-white">Data Uang Masuk</p>
+          </div>
+        </div>
+      </a>
+    </li>
 
-                <!-- Uang Keluar -->
-                <li class="nav-item">
-                  <a href="uang-keluar.php" class="nav-link text-white">
-                    <i class="far fa-circle nav-icon text-white"></i>
-                    <p>Data Uang Keluar</p>
-                  </a>
-                </li>
+    <!-- Uang Keluar -->
+    <li class="nav-item mt-1">
+      <a href="uang-keluar.php" class="nav-link <?php echo ($currentPage == 'uang-keluar.php') ? 'active' : ''; ?>" style="<?php echo ($currentPage == 'uang-keluar.php') ? 'background-color: rgba(255,255,255,0.1);' : ''; ?>">
+        <div class="d-flex align-items-center">
+          <i class="fas fa-arrow-circle-up nav-icon mr-2" style="color: #dc3545;"></i>
+          <div>
+            <p class="mb-0 text-white">Data Uang Keluar</p>
+          </div>
+        </div>
+      </a>
+    </li>
 
-              </ul>
-            </li>
+  </ul>
+</li>
 
 
             <!-- Data Akun -->
