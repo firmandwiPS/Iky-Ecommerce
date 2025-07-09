@@ -152,12 +152,29 @@ if (isset($_POST['hapus'])) {
     </div>
 
     <section class="content">
-        <div class="container-fluid">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
-                    <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Tambah Pesanan</span>
-                </button>
-            </div>
+<div class="flex justify-between items-center mb-3">
+    <div class="flex items-center">
+        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalTambah">
+            <i class="fas fa-plus"></i> <span class="hidden sm:inline">Tambah Pesanan</span>
+        </button>
+        
+        <!-- Compact Export Icons with spacing -->
+        <div class="flex space-x-2">  <!-- Added space-x-2 for horizontal spacing -->
+            <a href="makanan-excel.php" class="btn btn-sm btn-outline-success" title="Export Excel">
+                <i class="fas fa-file-excel"></i>
+                <span class="hidden md:inline ml-1">Excel</span>
+            </a>
+            <a href="makanan-pdf.php" class="btn btn-sm btn-outline-danger" title="Export PDF">
+                <i class="fas fa-file-pdf"></i>
+                <span class="hidden md:inline ml-1">PDF</span>
+            </a>
+            <a href="makanan-word.php" class="btn btn-sm btn-outline-primary" title="Export Word">
+                <i class="fas fa-file-word"></i>
+                <span class="hidden md:inline ml-1">Word</span>
+            </a>
+        </div>
+    </div>
+</div>
 
             <div class="card">
                 <div class="card-header bg-primary text-white">
@@ -213,6 +230,9 @@ if (isset($_POST['hapus'])) {
                                     </td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-1">
+                                            <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal" data-bs-target="#modalDetail<?= $p['id']; ?>">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
                                             <button class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $p['id']; ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
@@ -222,6 +242,58 @@ if (isset($_POST['hapus'])) {
                                         </div>
                                     </td>
                                 </tr>
+
+                                <!-- Modal Detail -->
+                                <div class="modal fade" id="modalDetail<?= $p['id']; ?>" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-info text-white">
+                                                <h5 class="modal-title">Detail Pesanan</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <h6 class="fw-bold">Informasi Pelanggan</h6>
+                                                    <div class="ps-3">
+                                                        <p><strong>Nama:</strong> <?= htmlspecialchars($p['nama_pelanggan']); ?></p>
+                                                        <p><strong>No. WA:</strong> <?= htmlspecialchars($p['no_wa']); ?></p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <h6 class="fw-bold">Detail Pesanan</h6>
+                                                    <div class="ps-3">
+                                                        <?php 
+                                                        $detail_items = explode(", ", $p['detail']);
+                                                        echo '<ul class="mb-0">';
+                                                        foreach ($detail_items as $item) {
+                                                            echo '<li>' . htmlspecialchars($item) . '</li>';
+                                                        }
+                                                        echo '</ul>';
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <h6 class="fw-bold">Informasi Pembayaran</h6>
+                                                    <div class="ps-3">
+                                                        <p><strong>Total:</strong> Rp<?= number_format($p['total'], 0, ',', '.'); ?></p>
+                                                        <p>
+                                                            <strong>Status:</strong> 
+                                                            <span class="badge <?= $status_class; ?>">
+                                                                <?= htmlspecialchars($p['status']); ?>
+                                                            </span>
+                                                        </p>
+                                                        <p><strong>Waktu Pesan:</strong> <?= date('d-m-Y H:i', strtotime($p['created_at'])); ?></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Modal Ubah -->
                                 <div class="modal fade" id="modalUbah<?= $p['id']; ?>" tabindex="-1" aria-hidden="true">

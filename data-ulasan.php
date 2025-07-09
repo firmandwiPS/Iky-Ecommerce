@@ -130,9 +130,9 @@ if (isset($_POST['hapus'])) {
                                     <th style="width: 120px;">Makanan</th>
                                     <th style="width: 120px;">Pengulas</th>
                                     <th style="min-width: 250px;">Ulasan</th>
-                                    <th class="text-center" style="width: 100px;">Rating</th>
+                                    <th class="text-center" style="width: 120px;">Rating</th>
                                     <th style="width: 120px;">Tanggal</th>
-                                    <th class="text-center" style="width: 100px;">Aksi</th>
+                                    <th class="text-center" style="width: 150px;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -167,6 +167,9 @@ if (isset($_POST['hapus'])) {
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
+                                                <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal" data-bs-target="#modalDetail<?= $ulasan['id']; ?>">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
                                                 <button class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $ulasan['id']; ?>">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
@@ -176,6 +179,66 @@ if (isset($_POST['hapus'])) {
                                             </div>
                                         </td>
                                     </tr>
+
+                                    <!-- Modal Detail -->
+                                    <div class="modal fade" id="modalDetail<?= $ulasan['id']; ?>" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-info text-white">
+                                                    <h5 class="modal-title">Detail Ulasan</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Makanan</label>
+                                                        <p><?= htmlspecialchars($ulasan['nama_makanan']); ?></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Nama Pengulas</label>
+                                                        <p><?= htmlspecialchars($ulasan['nama_pengulas']); ?></p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Ulasan</label>
+                                                        <p><?= htmlspecialchars($ulasan['ulasan']); ?></p>
+                                                    </div>
+                                                    <?php if ($ulasan['kritik']): ?>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Kritik</label>
+                                                        <p><?= htmlspecialchars($ulasan['kritik']); ?></p>
+                                                    </div>
+                                                    <?php endif; ?>
+                                                    <?php if ($ulasan['saran']): ?>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Saran</label>
+                                                        <p><?= htmlspecialchars($ulasan['saran']); ?></p>
+                                                    </div>
+                                                    <?php endif; ?>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Rating</label>
+                                                        <p>
+                                                            <?php
+                                                            for ($i = 1; $i <= 5; $i++) {
+                                                                if ($i <= $ulasan['rating']) {
+                                                                    echo '<i class="fas fa-star text-warning"></i>';
+                                                                } else {
+                                                                    echo '<i class="far fa-star text-warning"></i>';
+                                                                }
+                                                            }
+                                                            ?>
+                                                            (<?= $ulasan['rating'] ?>/5)
+                                                        </p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-bold">Tanggal</label>
+                                                        <p><?= date('d-m-Y H:i', strtotime($ulasan['tanggal'])); ?></p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <!-- Modal Ubah -->
                                     <div class="modal fade" id="modalUbah<?= $ulasan['id']; ?>" tabindex="-1" aria-hidden="true">

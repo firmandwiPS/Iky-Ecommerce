@@ -95,20 +95,36 @@ if (isset($_POST['ubah'])) {
 
     <section class="content">
         <div class="container-fluid">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah">
-                    <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Tambah Makanan</span>
-                </button>
-
-
-            </div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center">
+        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalTambah">
+            <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Tambah Makanan</span>
+        </button>
+        
+        <!-- Compact Export Icons -->
+        <div class="flex space-x-2">  <!-- Added space-x-2 for horizontal spacing -->
+            <a href="makanan-excel.php" class="btn btn-sm btn-outline-success" title="Export Excel">
+                <i class="fas fa-file-excel"></i>
+                <span class="hidden md:inline ml-1">Excel</span>
+            </a>
+            <a href="makanan-pdf.php" class="btn btn-sm btn-outline-danger" title="Export PDF">
+                <i class="fas fa-file-pdf"></i>
+                <span class="hidden md:inline ml-1">PDF</span>
+            </a>
+            <a href="makanan-word.php" class="btn btn-sm btn-outline-primary" title="Export Word">
+                <i class="fas fa-file-word"></i>
+                <span class="hidden md:inline ml-1">Word</span>
+            </a>
+        </div>
+    </div>
+</div>
 
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h3 class="card-title">Daftar Makanan</h3>
                 </div>
                 <div class="card-body table-responsive p-0">
-                    <table class="table table-bordered table-hover mb-0">
+                    <table class="table table-bordered table-hover mb-0" >
                         <thead class="bg-primary text-white">
                             <tr>
                                 <th class="text-center">No</th>
@@ -150,15 +166,86 @@ if (isset($_POST['ubah'])) {
                                     </td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-1">
-                                            <button type="button" class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $makanan['id']; ?>">
+                                            <!-- Detail Button -->
+                                            <button type="button" class="btn btn-sm btn-info text-white" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#modalDetail<?= $makanan['id']; ?>">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            
+                                            <!-- Edit Button -->
+                                            <button type="button" class="btn btn-sm btn-warning text-white" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#modalUbah<?= $makanan['id']; ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <button onclick="konfirmasiHapus(<?= $makanan['id']; ?>)" class="btn btn-sm btn-danger text-white">
+                                            
+                                            <!-- Delete Button -->
+                                            <button onclick="konfirmasiHapus(<?= $makanan['id']; ?>)" 
+                                                    class="btn btn-sm btn-danger text-white">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
+
+                                <!-- Modal Detail -->
+                                <div class="modal fade" id="modalDetail<?= $makanan['id']; ?>" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-info text-white">
+                                                <h5 class="modal-title">Detail Makanan</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-bold">Nama Makanan</label>
+                                                        <p><?= htmlspecialchars($makanan['nama_makanan']); ?></p>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-bold">Harga</label>
+                                                        <p>Rp<?= number_format($makanan['harga'], 0, ',', '.'); ?></p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-bold">Kategori</label>
+                                                        <p><?= htmlspecialchars($makanan['kategori']); ?></p>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-bold">Stok</label>
+                                                        <p><span class="badge <?= $makanan['stok'] > 0 ? 'bg-success' : 'bg-danger' ?>">
+                                                            <?= $makanan['stok']; ?>
+                                                        </span></p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">Deskripsi</label>
+                                                    <p><?= htmlspecialchars($makanan['deskripsi']); ?></p>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-bold">Gambar</label>
+                                                        <img src="gambar/<?= $makanan['gambar']; ?>" width="150" class="img-thumbnail">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label fw-bold">Recommended</label>
+                                                        <p><span class="badge <?= $makanan['recommended'] == 'Ya' ? 'bg-success' : 'bg-secondary' ?>">
+                                                            <?= $makanan['recommended']; ?>
+                                                        </span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Modal Ubah -->
                                 <div class="modal fade" id="modalUbah<?= $makanan['id']; ?>" tabindex="-1" aria-hidden="true">
@@ -338,7 +425,6 @@ if (isset($_POST['ubah'])) {
 
     /* Mobile optimizations */
     @media (max-width: 767.98px) {
-
         .table th,
         .table td {
             padding: 0.5rem;
@@ -349,6 +435,11 @@ if (isset($_POST['ubah'])) {
             padding: 0.25rem 0.5rem;
             font-size: 0.75rem;
         }
+    }
+
+    /* Export button styling */
+    .dropdown-toggle::after {
+        margin-left: 0.5em;
     }
 </style>
 
@@ -381,6 +472,62 @@ if (isset($_POST['ubah'])) {
             }
 
             this.value = value;
+        });
+    });
+
+    // Initialize DataTable with export buttons
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: '<i class="fas fa-file-excel"></i> Excel',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        columns: ':visible:not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="fas fa-file-pdf"></i> PDF',
+                    className: 'btn btn-danger',
+                    exportOptions: {
+                        columns: ':visible:not(:last-child)'
+                    },
+                    customize: function(doc) {
+                        doc.defaultStyle.fontSize = 8;
+                        doc.styles.tableHeader.fontSize = 9;
+                        doc.pageMargins = [20, 20, 20, 20];
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fas fa-print"></i> Print',
+                    className: 'btn btn-info',
+                    exportOptions: {
+                        columns: ':visible:not(:last-child)'
+                    }
+                }
+            ],
+            responsive: true,
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json'
+            }
+        });
+
+        // Manual export triggers
+        $('#exportExcel').click(function() {
+            $('#dataTable').DataTable().button('.buttons-excel').trigger();
+        });
+
+        $('#exportPdf').click(function() {
+            $('#dataTable').DataTable().button('.buttons-pdf').trigger();
+        });
+
+        $('#exportWord').click(function() {
+            // Word export requires a different approach
+            window.location.href = 'export-word.php';
         });
     });
 </script>

@@ -42,13 +42,37 @@ $currentPage = basename($_SERVER['PHP_SELF']);
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.bootstrap5.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css">
+
 
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- Export Libraries -->
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+
   <!-- jQuery -->
   <script src="assets-template/plugins/jquery/jquery.min.js"></script>
+
+<!-- Di bagian head -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- Sebelum penutup body -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -124,10 +148,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
           font-size: 0.8rem;
         }
       }
+      
     </style>
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar elevation-4" style="background-color: #1e3a8a;"> <!-- blue-900 -->
+    <aside class="main-sidebar elevation-4" style="background-color: #1e3a8a;"
+    
+    > <!-- blue-900 -->
 
       <!-- Brand Logo -->
       <a href="dasboard.php" class="brand-link text-white text-decoration-none">
@@ -178,16 +205,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
               </a>
             </li>
 
-<li class="nav-item has-treeview menu-open">
-  <a href="#" class="nav-link active" style="background-color: rgba(255,255,255,0.1);">
-    <i class="nav-icon fas fa-money-bill-wave"></i>
-    <p>
+<li class="nav-item has-treeview" id="data-pengeluaran-menu">
+  <a href="#" class="nav-link" data-widget="treeview">
+    <i class="nav-icon fas fa-money-bill-wave text-white"></i>
+    <p class="text-white">
       Data Pengeluaran
       <i class="right fas fa-angle-left"></i>
     </p>
   </a>
   <ul class="nav nav-treeview" style="padding-left: 15px;">
-    
     <!-- Data Keuangan -->
     <li class="nav-item">
       <a href="data-keuangan.php" class="nav-link <?php echo ($currentPage == 'data-keuangan.php') ? 'active' : ''; ?>" style="<?php echo ($currentPage == 'data-keuangan.php') ? 'background-color: rgba(255,255,255,0.1);' : ''; ?>">
@@ -223,10 +249,61 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </div>
       </a>
     </li>
-
   </ul>
 </li>
 
+
+<script>
+// Fungsi untuk menyimpan state menu
+function saveMenuState(menuId, isOpen) {
+  localStorage.setItem(menuId, isOpen);
+}
+
+// Fungsi untuk memuat state menu
+function loadMenuState(menuId) {
+  return localStorage.getItem(menuId) === 'true';
+}
+
+// Inisialisasi saat dokumen siap
+document.addEventListener('DOMContentLoaded', function() {
+  // Menu Data Pengeluaran
+  const pengeluaranMenu = document.getElementById('data-pengeluaran-menu');
+  
+  // Cek apakah salah satu submenu aktif
+  const isSubmenuActive = pengeluaranMenu.querySelector('.nav-link.active') !== null;
+  
+  // Load state dari localStorage atau set default berdasarkan submenu aktif
+  const savedState = loadMenuState('data-pengeluaran-menu');
+  const shouldOpen = savedState !== null ? savedState : isSubmenuActive;
+  
+  if (shouldOpen) {
+    pengeluaranMenu.classList.add('menu-open');
+  } else {
+    pengeluaranMenu.classList.remove('menu-open');
+  }
+  
+  // Tambahkan event listener untuk toggle
+  const toggleLink = pengeluaranMenu.querySelector('a[data-widget="treeview"]');
+  toggleLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    const isCurrentlyOpen = pengeluaranMenu.classList.contains('menu-open');
+    pengeluaranMenu.classList.toggle('menu-open');
+    saveMenuState('data-pengeluaran-menu', !isCurrentlyOpen);
+  });
+  
+  // Auto buka menu jika submenu aktif
+  if (isSubmenuActive) {
+    pengeluaranMenu.classList.add('menu-open');
+    saveMenuState('data-pengeluaran-menu', true);
+  }
+});
+
+// Untuk menu lainnya jika ada
+// document.querySelectorAll('.nav-item.has-treeview').forEach(menu => {
+//   const menuId = menu.id || menu.querySelector('a').textContent.trim();
+//   ...
+// });
+</script>
 
             <!-- Data Akun -->
             <li class="nav-item">
@@ -256,7 +333,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
   <!-- ./wrapper -->
 
   <!-- Optional JS Scripts (for Bootstrap or other plugin initialization) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

@@ -67,33 +67,77 @@ usort($combined_data, function($a, $b) {
 
     <section class="content">
         <div class="container-fluid">
-            <!-- Summary Cards -->
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="card bg-success text-white">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Uang Masuk</h5>
-                            <p class="card-text h4"><?= formatRupiah($total_masuk) ?></p>
-                        </div>
+<!-- Summary Cards -->
+<div class="row mb-4 g-3">
+    <div class="col-12 col-md-4">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">Total Uang Masuk</h5>
+                        <p class="card-text h4 mb-0"><?= formatRupiah($total_masuk) ?></p>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-danger text-white">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Uang Keluar</h5>
-                            <p class="card-text h4"><?= formatRupiah($total_keluar) ?></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title">Saldo Akhir</h5>
-                            <p class="card-text h4"><?= formatRupiah($saldo) ?></p>
-                        </div>
+                    <div class="ms-3">
+                        <i class="fas fa-wallet fa-2x opacity-50"></i>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card bg-danger text-white h-100">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">Total Uang Keluar</h5>
+                        <p class="card-text h4 mb-0"><?= formatRupiah($total_keluar) ?></p>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-money-bill-wave fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h5 class="card-title mb-1">Saldo Akhir</h5>
+                        <p class="card-text h4 mb-0"><?= formatRupiah($saldo) ?></p>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fas fa-piggy-bank fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Mobile optimization */
+    @media (max-width: 767.98px) {
+        .summary-card .card-body {
+            padding: 1rem !important;
+        }
+        .summary-card .card-title {
+            font-size: 1rem;
+        }
+        .summary-card .card-text {
+            font-size: 1.25rem !important;
+        }
+        .summary-card i {
+            font-size: 1.5rem !important;
+        }
+    }
+    
+    /* Make cards equal height */
+    .card {
+        min-height: 100%;
+    }
+</style>
 
             <!-- Action Buttons -->
             <div class="d-flex justify-content-between mb-3">
