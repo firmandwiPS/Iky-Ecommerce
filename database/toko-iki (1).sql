@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 09, 2025 at 12:44 AM
+-- Generation Time: Jul 01, 2025 at 08:18 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -42,61 +42,6 @@ CREATE TABLE `akun` (
 
 INSERT INTO `akun` (`id_akun`, `nama`, `username`, `email`, `password`, `level`) VALUES
 (18, 'admin', 'admin', 'Admin@gmail.com', '$2y$10$rAEf9i/gSH64uKefDhApdeIIC1xuGvBlvIRmt27CaugLgnWk.vvcm', '1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `data_keuangan`
---
-
-CREATE TABLE `data_keuangan` (
-  `id` int NOT NULL,
-  `tanggal` date NOT NULL,
-  `total_masuk` double DEFAULT '0',
-  `total_keluar` double DEFAULT '0',
-  `saldo` double DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `data_uang_keluar`
---
-
-CREATE TABLE `data_uang_keluar` (
-  `id` int NOT NULL,
-  `tanggal` date NOT NULL,
-  `keterangan` text NOT NULL,
-  `jumlah` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `data_uang_keluar`
---
-
-INSERT INTO `data_uang_keluar` (`id`, `tanggal`, `keterangan`, `jumlah`) VALUES
-(2, '2025-07-08', 'bensin', 11000);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `data_uang_masuk`
---
-
-CREATE TABLE `data_uang_masuk` (
-  `id` int NOT NULL,
-  `tanggal` date NOT NULL,
-  `keterangan` text NOT NULL,
-  `jumlah` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `data_uang_masuk`
---
-
-INSERT INTO `data_uang_masuk` (`id`, `tanggal`, `keterangan`, `jumlah`) VALUES
-(3, '2025-07-08', 'seponsor', 300000),
-(4, '2025-07-08', 'pesanan', 5000000);
 
 -- --------------------------------------------------------
 
@@ -144,7 +89,7 @@ INSERT INTO `makanan` (`id`, `nama_makanan`, `harga`, `kategori`, `deskripsi`, `
 (7, 'cireng', 2000, 'Snack', 'enak', '6861d425925ce-Malaz.png', 20, 'Ya'),
 (8, 'baso', 15000, 'Makanan', 'enak', '6861d443d1705-Kiko.jpg', 30, 'Ya'),
 (9, 'es teh ', 3000, 'Minuman', 'enak', '686243447c799-A logo of a crow.jpeg', 20, 'Ya'),
-(10, 'pangsit', 9000, 'Snack', 'enak', '686a0cd4aa714-Screenshot 2025-05-16 185818.png', 20, 'Ya'),
+(10, 'pangsit', 9000, 'Snack', 'enak', '686247196fe33-A logo of a crow.jpeg', 20, 'Ya'),
 (11, 'mie ayam', 20000, 'Makanan', 'enak', '6862474d4a8e2-Screenshot 2025-06-30 141246.png', 20, 'Tidak');
 
 -- --------------------------------------------------------
@@ -168,9 +113,8 @@ CREATE TABLE `pesanan` (
 --
 
 INSERT INTO `pesanan` (`id`, `nama_pelanggan`, `no_wa`, `detail`, `total`, `status`, `created_at`) VALUES
-(13, 'firman', '08626277463', 'mie ayam x3, baso x4', 120000, 'Dibatalkan', '2025-07-06 05:38:19'),
-(15, 'firman', '08626277463', 'pangsit x1', 9000, 'Sedang diproses', '2025-07-08 10:41:55'),
-(16, 'firman', '0878978678', 'cireng x1, baso x1, es teh  x3', 26000, 'Selesai', '2025-07-08 12:30:23');
+(6, 'firman', '08626277463', 'baso x 1 = Rp 15.000\n', 15000, 'Sedang diproses', '2025-06-30 01:27:50'),
+(7, 'firman', '08626277463', 'baso x 2 = Rp 30.000\n', 30000, 'Sedang diproses', '2025-06-30 01:30:21');
 
 -- --------------------------------------------------------
 
@@ -187,16 +131,16 @@ CREATE TABLE `ulasan` (
   `saran` text,
   `rating` tinyint NOT NULL,
   `tanggal` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ;
 
 --
 -- Dumping data for table `ulasan`
 --
 
 INSERT INTO `ulasan` (`id`, `makanan_id`, `nama_pengulas`, `ulasan`, `kritik`, `saran`, `rating`, `tanggal`) VALUES
-(3, 11, 'cahya', 'well', '', 'enakk', 4, '2025-07-01 08:24:19'),
-(4, 8, 'lardi', 'enak', '', '', 4, '2025-07-01 17:42:44'),
-(5, 10, 'vani', 'Enak well', 'okh', 'lebih enk lgi ', 4, '2025-07-06 14:05:01');
+(1, 8, 'firamn', 'bagus', '', '', 5, '2025-07-01 08:08:41'),
+(2, 10, 'amad', 'gkenak', 'belajar lg8i deh gk enak', 'mkn tai ajh', 1, '2025-07-01 08:19:49'),
+(3, 11, 'cahya', 'well', '', 'enakk', 4, '2025-07-01 08:24:19');
 
 --
 -- Indexes for dumped tables
@@ -207,24 +151,6 @@ INSERT INTO `ulasan` (`id`, `makanan_id`, `nama_pengulas`, `ulasan`, `kritik`, `
 --
 ALTER TABLE `akun`
   ADD PRIMARY KEY (`id_akun`);
-
---
--- Indexes for table `data_keuangan`
---
-ALTER TABLE `data_keuangan`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `data_uang_keluar`
---
-ALTER TABLE `data_uang_keluar`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `data_uang_masuk`
---
-ALTER TABLE `data_uang_masuk`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `keranjang`
@@ -262,28 +188,10 @@ ALTER TABLE `akun`
   MODIFY `id_akun` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT for table `data_keuangan`
---
-ALTER TABLE `data_keuangan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `data_uang_keluar`
---
-ALTER TABLE `data_uang_keluar`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `data_uang_masuk`
---
-ALTER TABLE `data_uang_masuk`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
 -- AUTO_INCREMENT for table `keranjang`
 --
 ALTER TABLE `keranjang`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `makanan`
@@ -295,13 +203,13 @@ ALTER TABLE `makanan`
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `ulasan`
 --
 ALTER TABLE `ulasan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

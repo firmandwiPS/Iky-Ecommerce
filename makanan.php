@@ -95,29 +95,29 @@ if (isset($_POST['ubah'])) {
 
     <section class="content">
         <div class="container-fluid">
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <div class="d-flex align-items-center">
-        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalTambah">
-            <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Tambah Makanan</span>
-        </button>
-        
-        <!-- Compact Export Icons -->
-        <div class="flex space-x-2">  <!-- Added space-x-2 for horizontal spacing -->
-            <a href="makanan-excel.php" class="btn btn-sm btn-outline-success" title="Export Excel">
-                <i class="fas fa-file-excel"></i>
-                <span class="hidden md:inline ml-1">Excel</span>
-            </a>
-            <a href="makanan-pdf.php" class="btn btn-sm btn-outline-danger" title="Export PDF">
-                <i class="fas fa-file-pdf"></i>
-                <span class="hidden md:inline ml-1">PDF</span>
-            </a>
-            <a href="makanan-word.php" class="btn btn-sm btn-outline-primary" title="Export Word">
-                <i class="fas fa-file-word"></i>
-                <span class="hidden md:inline ml-1">Word</span>
-            </a>
-        </div>
-    </div>
-</div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                            <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Tambah Makanan</span>
+                        </button>
+                        
+                        <!-- Compact Export Icons -->
+                        <div class="flex space-x-2">  <!-- Added space-x-2 for horizontal spacing -->
+                            <a href="makanan-excel.php" class="btn btn-sm btn-outline-success" title="Export Excel">
+                                <i class="fas fa-file-excel"></i>
+                                <span class="hidden md:inline ml-1">Excel</span>
+                            </a>
+                            <a href="makanan-pdf.php" class="btn btn-sm btn-outline-danger" title="Export PDF">
+                                <i class="fas fa-file-pdf"></i>
+                                <span class="hidden md:inline ml-1">PDF</span>
+                            </a>
+                            <a href="makanan-word.php" class="btn btn-sm btn-outline-primary" title="Export Word">
+                                <i class="fas fa-file-word"></i>
+                                <span class="hidden md:inline ml-1">Word</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
             <div class="card">
                 <div class="card-header bg-primary text-white">
@@ -532,4 +532,4 @@ if (isset($_POST['ubah'])) {
     });
 </script>
 
-<?php include 'layout/footer.php'; ?>
+<?php include 'layout/footer.php'; ?> 
