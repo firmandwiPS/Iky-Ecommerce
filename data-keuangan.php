@@ -241,146 +241,162 @@ usort($combined_data, function($a, $b) {
         </a>
     </div>
 </div>
+<!-- Transactions Table -->
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h3 class="card-title">Riwayat Transaksi</h3>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-bordered mb-0">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th class="text-center">No</th>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
+                    <th class="text-center">Jenis</th>
+                    <th class="text-center">Jumlah</th>
+                    <th class="text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!empty($combined_data)): ?>
+                    <?php $no = 1; foreach ($combined_data as $transaksi): ?>
+                    <tr>
+                        <td class="text-center"><?= $no++; ?></td>
+                        <td><?= date('d/m/Y', strtotime($transaksi['tanggal'])) ?></td>
+                        <td><?= htmlspecialchars($transaksi['keterangan']) ?></td>
+                        <td class="text-center">
+                            <span class="badge bg-<?= $transaksi['color'] ?>">
+                                <?= $transaksi['jenis'] ?>
+                            </span>
+                        </td>
+                        <td class="text-<?= $transaksi['color'] ?> text-center">
+                            <?= formatRupiah($transaksi['jumlah']) ?>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-1">
+                                <!-- Detail Button -->
+                                <button class="btn btn-sm btn-info text-white" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modalDetail<?= $transaksi['jenis'].$transaksi['id'] ?>">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                
+                                <!-- Edit Button -->
+                                <button class="btn btn-sm btn-warning text-white" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modalEdit<?= $transaksi['jenis'].$transaksi['id'] ?>">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                
+                                <!-- Delete Button -->
+                                <a href="<?= $transaksi['jenis'] == 'Masuk' ? 'uang-masuk.php' : 'uang-keluar.php' ?>?hapus=<?= $transaksi['id'] ?>" 
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Yakin ingin menghapus transaksi ini?')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
 
-            <!-- Transactions Table -->
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="card-title">Riwayat Transaksi</h3>
-                </div>
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-bordered table-hover mb-0">
-                        <thead class="bg-primary text-white">
-                            <tr>
-                                <th class="text-center">No</th>
-                                <th>Tanggal</th>
-                                <th>Keterangan</th>
-                                <th class="text-center">Jenis</th>
-                                <th class="text-center">Jumlah</th>
-                                <th class="text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if(!empty($combined_data)): ?>
-                                <?php $no = 1; foreach ($combined_data as $transaksi): ?>
-                                <tr>
-                                    <td class="text-center"><?= $no++; ?></td>
-                                    <td><?= date('d/m/Y', strtotime($transaksi['tanggal'])) ?></td>
-                                    <td><?= htmlspecialchars($transaksi['keterangan']) ?></td>
-                                    <td class="text-center">
-                                        <span class="badge bg-<?= $transaksi['color'] ?>">
-                                            <?= $transaksi['jenis'] ?>
-                                        </span>
-                                    </td>
-                                    <td class="text-<?= $transaksi['color'] ?> text-center">
-                                        <?= formatRupiah($transaksi['jumlah']) ?>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-1">
-                                            <!-- Detail Button -->
-                                            <button class="btn btn-sm btn-info text-white" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#modalDetail<?= $transaksi['jenis'].$transaksi['id'] ?>">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            
-                                            <!-- Edit Button -->
-                                            <button class="btn btn-sm btn-warning text-white" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#modalEdit<?= $transaksi['jenis'].$transaksi['id'] ?>">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            
-                                            <!-- Delete Button -->
-                                            <a href="<?= $transaksi['jenis'] == 'Masuk' ? 'uang-masuk.php' : 'uang-keluar.php' ?>?hapus=<?= $transaksi['id'] ?>" 
-                                               class="btn btn-sm btn-danger"
-                                               onclick="return confirm('Yakin ingin menghapus transaksi ini?')">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
+                    <!-- Detail Modal -->
+                    <div class="modal fade" id="modalDetail<?= $transaksi['jenis'].$transaksi['id'] ?>" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-info text-white">
+                                    <h5 class="modal-title">Detail Transaksi</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Jenis Transaksi</label>
+                                        <p><span class="badge bg-<?= $transaksi['color'] ?>"><?= $transaksi['jenis'] ?></span></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Tanggal</label>
+                                        <p><?= date('d F Y', strtotime($transaksi['tanggal'])) ?></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Keterangan</label>
+                                        <p><?= htmlspecialchars($transaksi['keterangan']) ?></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Jumlah</label>
+                                        <p class="text-<?= $transaksi['color'] ?>"><?= formatRupiah($transaksi['jumlah']) ?></p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Modal -->
+                    <div class="modal fade" id="modalEdit<?= $transaksi['jenis'].$transaksi['id'] ?>" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="post" action="<?= $transaksi['jenis'] == 'Masuk' ? 'uang-masuk.php' : 'uang-keluar.php' ?>">
+                                    <input type="hidden" name="id" value="<?= $transaksi['id'] ?>">
+                                    <div class="modal-header bg-warning text-white">
+                                        <h5 class="modal-title">Edit Transaksi</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Tanggal</label>
+                                            <input type="date" name="tanggal" class="form-control" 
+                                                   value="<?= $transaksi['tanggal'] ?>" required>
                                         </div>
-                                    </td>
-                                </tr>
-
-                                <!-- Detail Modal -->
-                                <div class="modal fade" id="modalDetail<?= $transaksi['jenis'].$transaksi['id'] ?>" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-info text-white">
-                                                <h5 class="modal-title">Detail Transaksi</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold">Jenis Transaksi</label>
-                                                    <p><span class="badge bg-<?= $transaksi['color'] ?>"><?= $transaksi['jenis'] ?></span></p>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold">Tanggal</label>
-                                                    <p><?= date('d F Y', strtotime($transaksi['tanggal'])) ?></p>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold">Keterangan</label>
-                                                    <p><?= htmlspecialchars($transaksi['keterangan']) ?></p>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold">Jumlah</label>
-                                                    <p class="text-<?= $transaksi['color'] ?>"><?= formatRupiah($transaksi['jumlah']) ?></p>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                        <div class="mb-3">
+                                            <label class="form-label">Keterangan</label>
+                                            <input type="text" name="keterangan" class="form-control" 
+                                                   value="<?= htmlspecialchars($transaksi['keterangan']) ?>" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Jumlah</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">Rp</span>
+                                                <input type="text" name="jumlah" class="form-control" 
+                                                       value="<?= number_format($transaksi['jumlah'], 0, ',', '') ?>" required>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <!-- Edit Modal -->
-                                <div class="modal fade" id="modalEdit<?= $transaksi['jenis'].$transaksi['id'] ?>" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <form method="post" action="<?= $transaksi['jenis'] == 'Masuk' ? 'uang-masuk.php' : 'uang-keluar.php' ?>">
-                                                <input type="hidden" name="id" value="<?= $transaksi['id'] ?>">
-                                                <div class="modal-header bg-warning text-white">
-                                                    <h5 class="modal-title">Edit Transaksi</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Tanggal</label>
-                                                        <input type="date" name="tanggal" class="form-control" 
-                                                               value="<?= $transaksi['tanggal'] ?>" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Keterangan</label>
-                                                        <input type="text" name="keterangan" class="form-control" 
-                                                               value="<?= htmlspecialchars($transaksi['keterangan']) ?>" required>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label">Jumlah</label>
-                                                        <div class="input-group">
-                                                            <span class="input-group-text">Rp</span>
-                                                            <input type="text" name="jumlah" class="form-control" 
-                                                                   value="<?= number_format($transaksi['jumlah'], 0, ',', '') ?>" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                    <button type="submit" name="edit" class="btn btn-warning">Simpan Perubahan</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                        <button type="submit" name="edit" class="btn btn-warning">Simpan Perubahan</button>
                                     </div>
-                                </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="6" class="text-center">Tidak ada data transaksi</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="text-center">Tidak ada data transaksi</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    /* Remove hover effect from table rows */
+    .table tbody tr {
+        transition: none;
+    }
+    
+    .table tbody tr:hover {
+        background-color: inherit !important;
+    }
+    
+    /* Keep the striped effect if you want */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0,0,0,.02);
+    }
+</style>
+
         </div>
     </section>
 </div>
