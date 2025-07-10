@@ -10,6 +10,6 @@ User Login :
 - password : 123456
 
 1. Akun Owner
-- username : owner
-- password : 123456
+- username : kedaisantuy
+- password : kedaicibitung14_
 
