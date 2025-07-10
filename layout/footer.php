@@ -80,12 +80,22 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.2.1/js/dataTables.bootstrap5.js"></script>
+<!-- Pastikan path ke Chart.js benar -->
+<script src="plugins/chart.js/Chart.min.js"></script>
 
+<!-- Atau gunakan CDN sebagai alternatif -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.ckeditor.com/4.25.0-lts/standard/ckeditor.js"></script>
 <script>
     CKEDITIOR.replace('alamat');
 </script>
 
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- load fontawesome cdn -->
 <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
     integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc"
