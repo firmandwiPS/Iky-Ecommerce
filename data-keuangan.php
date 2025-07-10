@@ -67,15 +67,22 @@ usort($combined_data, function($a, $b) {
 
     <section class="content">
         <div class="container-fluid">
-<!-- Summary Cards -->
+<!-- Summary Cards with Particle Effects -->
 <div class="row mb-4 g-3">
     <div class="col-12 col-md-4">
-        <div class="card bg-success text-white h-100">
-            <div class="card-body p-3">
+        <div class="card bg-success text-white h-100 position-relative overflow-hidden">
+            <!-- Particle effect for income -->
+            <div class="income-particles"></div>
+            <div class="card-body p-3 position-relative">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h5 class="card-title mb-1">Total Uang Masuk</h5>
                         <p class="card-text h4 mb-0"><?= formatRupiah($total_masuk) ?></p>
+                        <div class="mt-2">
+                            <span class="badge bg-white text-success">
+                                <i class="fas fa-arrow-up me-1"></i> Pemasukan
+                            </span>
+                        </div>
                     </div>
                     <div class="ms-3">
                         <i class="fas fa-wallet fa-2x opacity-50"></i>
@@ -85,12 +92,19 @@ usort($combined_data, function($a, $b) {
         </div>
     </div>
     <div class="col-12 col-md-4">
-        <div class="card bg-danger text-white h-100">
-            <div class="card-body p-3">
+        <div class="card bg-danger text-white h-100 position-relative overflow-hidden">
+            <!-- Particle effect for expense -->
+            <div class="expense-particles"></div>
+            <div class="card-body p-3 position-relative">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h5 class="card-title mb-1">Total Uang Keluar</h5>
                         <p class="card-text h4 mb-0"><?= formatRupiah($total_keluar) ?></p>
+                        <div class="mt-2">
+                            <span class="badge bg-white text-danger">
+                                <i class="fas fa-arrow-down me-1"></i> Pengeluaran
+                            </span>
+                        </div>
                     </div>
                     <div class="ms-3">
                         <i class="fas fa-money-bill-wave fa-2x opacity-50"></i>
@@ -100,12 +114,19 @@ usort($combined_data, function($a, $b) {
         </div>
     </div>
     <div class="col-12 col-md-4">
-        <div class="card bg-primary text-white h-100">
-            <div class="card-body p-3">
+        <div class="card bg-primary text-white h-100 position-relative overflow-hidden">
+            <!-- Particle effect for balance -->
+            <div class="balance-particles"></div>
+            <div class="card-body p-3 position-relative">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <h5 class="card-title mb-1">Saldo Akhir</h5>
                         <p class="card-text h4 mb-0"><?= formatRupiah($saldo) ?></p>
+                        <div class="mt-2">
+                            <span class="badge bg-white text-primary">
+                                <i class="fas fa-balance-scale me-1"></i> Balance
+                            </span>
+                        </div>
                     </div>
                     <div class="ms-3">
                         <i class="fas fa-piggy-bank fa-2x opacity-50"></i>
@@ -117,37 +138,109 @@ usort($combined_data, function($a, $b) {
 </div>
 
 <style>
+    /* Card styling */
+    .card {
+        min-height: 100%;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    /* Particle effects */
+    .income-particles, 
+    .expense-particles, 
+    .balance-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><circle fill="rgba(255,255,255,0.2)" cx="10" cy="10" r="1.5"/><circle fill="rgba(255,255,255,0.2)" cx="20" cy="20" r="1"/><circle fill="rgba(255,255,255,0.2)" cx="30" cy="30" r="1.5"/><circle fill="rgba(255,255,255,0.2)" cx="40" cy="40" r="1"/><circle fill="rgba(255,255,255,0.2)" cx="50" cy="50" r="1.5"/><circle fill="rgba(255,255,255,0.2)" cx="60" cy="60" r="1"/><circle fill="rgba(255,255,255,0.2)" cx="70" cy="70" r="1.5"/><circle fill="rgba(255,255,255,0.2)" cx="80" cy="80" r="1"/><circle fill="rgba(255,255,255,0.2)" cx="90" cy="90" r="1.5"/></svg>');
+        opacity: 0.3;
+        z-index: 0;
+    }
+    
+    .income-particles {
+        animation: floatParticles 15s linear infinite;
+    }
+    
+    .expense-particles {
+        animation: floatParticles 20s linear infinite reverse;
+    }
+    
+    .balance-particles {
+        animation: floatParticles 25s linear infinite alternate;
+    }
+    
+    @keyframes floatParticles {
+        0% { background-position: 0 0; }
+        100% { background-position: 100px 100px; }
+    }
+    
+    /* Badge styling */
+    .badge {
+        padding: 0.35em 0.65em;
+        font-weight: 500;
+        border-radius: 50px;
+    }
+    
     /* Mobile optimization */
     @media (max-width: 767.98px) {
-        .summary-card .card-body {
+        .card-body {
             padding: 1rem !important;
         }
-        .summary-card .card-title {
-            font-size: 1rem;
+        .card-title {
+            font-size: 1rem !important;
         }
-        .summary-card .card-text {
+        .card-text {
             font-size: 1.25rem !important;
         }
-        .summary-card i {
+        .card i {
             font-size: 1.5rem !important;
         }
     }
     
-    /* Make cards equal height */
-    .card {
-        min-height: 100%;
+    /* Content positioning */
+    .card-body {
+        z-index: 1;
     }
 </style>
 
-            <!-- Action Buttons -->
-            <div class="d-flex justify-content-between mb-3">
-                <a href="uang-masuk.php" class="btn btn-success">
-                    <i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline">Tambah Pemasukan</span>
-                </a>
-                <a href="uang-keluar.php" class="btn btn-danger">
-                    <i class="fas fa-minus-circle"></i> <span class="d-none d-sm-inline">Tambah Pengeluaran</span>
-                </a>
-            </div>
+<!-- Action Buttons -->
+<div class="d-flex justify-content-between mb-3">
+    <div class="d-flex gap-2">
+        <a href="uang-masuk.php" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline">Tambah Pemasukan</span>
+        </a>
+    </div>
+    
+    <div class="d-flex gap-2">
+        <a href="keuangan-excel.php" class="btn btn-outline-success" title="Export Excel">
+            <i class="fas fa-file-excel"></i>
+            <span class="d-none d-md-inline">Excel</span>
+        </a>
+        <a href="keuangan-pdf.php" class="btn btn-outline-danger" title="Export PDF">
+            <i class="fas fa-file-pdf"></i>
+            <span class="d-none d-md-inline">PDF</span>
+        </a>
+        <a href="keuangan-word.php" class="btn btn-outline-primary" title="Export Word">
+            <i class="fas fa-file-word"></i>
+            <span class="d-none d-md-inline">Word</span>
+        </a>
+    </div>
+    
+    <div class="d-flex gap-2">
+        <a href="uang-keluar.php" class="btn btn-danger">
+            <i class="fas fa-minus-circle"></i> <span class="d-none d-sm-inline">Tambah Pengeluaran</span>
+        </a>
+    </div>
+</div>
 
             <!-- Transactions Table -->
             <div class="card">
