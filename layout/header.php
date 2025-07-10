@@ -12,6 +12,28 @@ $currentPage = basename($_SERVER['PHP_SELF']);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= $title; ?></title>
 
+<!-- Favicon Keranjang Belanja Putih -->
+<!-- Versi hitam-putih dengan desain lebih clean -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://cdn-icons-png.flaticon.com/512/3144/3144456.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://cdn-icons-png.flaticon.com/512/3144/3144456.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://cdn-icons-png.flaticon.com/512/3144/3144456.png">
+
+<!-- Versi putih dengan background transparan -->
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AkEEjIZJ4HjZgAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAJklEQVQ4y2NgGAXDFmzatMmKAQ38f//+vT8qLzKQZRgqYAQDAF8DEW0QZvWZAAAAAElFTkSuQmCC" />
+
+<!-- Manifest dan theme color -->
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Untuk Windows -->
+<meta name="msapplication-TileImage" content="https://cdn-icons-png.flaticon.com/512/3144/3144456.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+
+<!-- Fallback untuk browser lama -->
+<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/3144/3144456.png">
+
+
+
   <!-- DataTables -->
   <link rel="stylesheet" href="assets-template/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="assets-template/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -90,7 +112,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 
 
-<!-- Preloader Toko Besi/Bangunan -->
+<!-- Preloader Toko admin panel -->
 <div class="preloader flex-column justify-content-center align-items-center bg-dark">
   <div class="industrial-loader">
     <div class="gear gear-large animation__rotate">
