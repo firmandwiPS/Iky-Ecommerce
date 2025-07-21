@@ -136,10 +136,10 @@ if (isset($_POST['ubah'])) {
                                     </td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-1">
+                                            <?php if ($_SESSION['level'] == 1): ?>
                                             <button class="btn btn-sm btn-warning text-white" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $akun['id_akun']; ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <?php if ($_SESSION['level'] == 1): ?>
                                                 <button onclick="konfirmasiHapus(<?= $akun['id_akun']; ?>)" class="btn btn-sm btn-danger text-white">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
